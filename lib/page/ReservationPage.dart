@@ -33,7 +33,7 @@ class _ReservationPageState extends State<ReservationPage> {
         backgroundColor: Colors.black,
         toolbarHeight: 80,
         title: const Text(
-          "Reservation",
+          "예약",
           style: TextStyle(
             color: Colors.white,
           ),

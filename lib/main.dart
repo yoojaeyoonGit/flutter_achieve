@@ -202,27 +202,27 @@ class _AchieveState extends State<Achieve> {
     );
   }
 
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   Timer.periodic(Duration(seconds: 2), (Timer timer) {
-  //     if (controller.currentIndex < _controller.slideList.length - 1) {
-  //       _controller.currentIndex.value++;
-  //       controller.animateToPage(
-  //         _controller.currentIndex.value,
-  //         duration: Duration(milliseconds: 350),
-  //         curve: Curves.easeIn,
-  //       );
-  //     } else {
-  //       ///시간차에 따른 indicator 색을 자연스럽게 하기 위해 animate 된 후에 인덱스 변경
-  //       controller
-  //           .animateToPage(
-  //             0,
-  //             duration: Duration(milliseconds: 350),
-  //             curve: Curves.easeIn,
-  //           )
-  //           .then((value) => _controller.currentIndex.value = 0);
-  //     }
-  //   });
-  // }
+// void initState() {
+//   // TODO: implement initState
+//   super.initState();
+//   Timer.periodic(Duration(seconds: 2), (Timer timer) {
+//     if (controller.currentIndex < _controller.slideList.length - 1) {
+//       _controller.currentIndex.value++;
+//       controller.animateToPage(
+//         _controller.currentIndex.value,
+//         duration: Duration(milliseconds: 350),
+//         curve: Curves.easeIn,
+//       );
+//     } else {
+//       ///시간차에 따른 indicator 색을 자연스럽게 하기 위해 animate 된 후에 인덱스 변경
+//       controller
+//           .animateToPage(
+//             0,
+//             duration: Duration(milliseconds: 350),
+//             curve: Curves.easeIn,
+//           )
+//           .then((value) => _controller.currentIndex.value = 0);
+//     }
+//   });
+// }
 }
