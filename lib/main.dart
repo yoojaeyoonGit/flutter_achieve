@@ -121,20 +121,6 @@ class _AchieveState extends State<Achieve> {
     );
   }
 
-  // ListView adList(double width, List<Container> pages) {
-  //   return ListView.separated(
-  //     scrollDirection: Axis.horizontal,
-  //     itemCount: pages.length,
-  //     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-  //     itemBuilder: (context, index) {
-  //       return pages[index];
-  //     },
-  //     separatorBuilder: (context, index) => SizedBox(
-  //       width: width * 0.07,
-  //     ),
-  //   );
-  // }
-
   PageView pageViewList(double width, List<Padding> pages) {
     return PageView.builder(
         controller: controller,

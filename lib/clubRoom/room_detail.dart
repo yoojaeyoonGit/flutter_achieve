@@ -12,9 +12,9 @@ class RoomDetail extends StatefulWidget {
 }
 
 class _RoomDetailState extends State<RoomDetail> {
-  // Duration duration = const Duration(hours: 00, minutes: 00, seconds: 00);
   late DateTime selectedDateForDate = DateTime.now();
   late DateTime selectedDateAtTime = DateTime.now();
+  late DateTime endTime = DateTime.now();
   DateTime selectedFullDate = DateTime.now();
   String durationForm = "";
 
@@ -23,6 +23,45 @@ class _RoomDetailState extends State<RoomDetail> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     double textSize = width * 0.05;
+
+    List<Container> images = [
+      Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        // height: 10,
+        width: width/1.4,
+        child: Image.network(
+            "https://yt3.googleusercontent.com/ytc/AIf8zZR8VBlMDZi6X85aGN_jcLIojmXoqPG1vrx93Nmj6w=s900-c-k-c0x00ffffff-no-rj",
+            width: width / 2,
+            fit: BoxFit.cover),
+      ),
+      Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        width: width/1.4,
+        child: Image.network(
+            "https://static01.nyt.com/images/2019/05/31/us/31applehq-01alt/31applehq-01alt-superJumbo.jpg?quality=75&auto=webp",
+            height: width / 2,
+            width: 10,
+            fit: BoxFit.cover),
+      ),
+      Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        width: width/1.4,
+        child: Image.network(
+            "https://blog.spoongraphics.co.uk/wp-content/uploads/2009/apple-wallpaper/Picture-5.jpg",
+            height: width / 2,
+            width: 10,
+            fit: BoxFit.cover),
+      ),
+    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -39,32 +78,86 @@ class _RoomDetailState extends State<RoomDetail> {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(
-            height: height / 3,
+          Expanded(
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: images.length,
+                // padding: const EdgeInsets.only(bottom: 300),
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20, bottom: 40, left: 10, right: 10),
+                    child: images[index],
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                      width: 20,
+                    )),
+          ),
+          Container(
+            height: height / 1.9,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Text(
+                Text(
                   "예약 시간",
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: textSize,
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 20.0),
-                      child: Icon(
-                        Icons.access_time_outlined,
-                        size: textSize,
-                      ),
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: timeIcon(textSize),
                     ),
                     yearSelectButton(context, textSize),
                     timeSelectedButton(textSize)
                   ],
+                ),
+                SizedBox(
+                  height: height / 30,
+                ),
+                Text(
+                  "종료 시간",
+                  style: TextStyle(
+                    fontSize: textSize,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: height / 6),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0, top: 15),
+                        child: timeIcon(textSize),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: width / 20, top: 15),
+                        child: Text(
+                          endYearFormat(selectedFullDate, endTime),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: textSize),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: Text(
+                          endTimeFormatter(selectedFullDate, endTime),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: textSize),
+                        ),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),
@@ -74,18 +167,44 @@ class _RoomDetailState extends State<RoomDetail> {
     );
   }
 
-  String changeDurationForm(double left, DateTime duration) {
+  String endYearFormat(DateTime selectedFullDate, DateTime endTime) {
+    endTime = selectedFullDate;
+
+    setState(() {
+      endTime = endTime.add(const Duration(hours: 1));
+    });
+    return "${endTime.year}. "
+        "${endTime.month}. "
+        "${endTime.day}. "
+        "${weekDayFormatting(endTime.weekday)}";
+  }
+
+  String endTimeFormatter(DateTime selectedFullDate, DateTime endTime) {
+    endTime = selectedFullDate;
+    String endTimeFormat = "";
+    setState(() {
+      endTime = endTime.add(const Duration(hours: 1));
+      endTimeFormat = changeDurationForm(endTime);
+    });
+
+    return endTimeFormat;
+  }
+
+  String changeDurationForm(DateTime duration) {
     String amPmFormat = "";
     String timeFormat = duration.toString().substring(11, 16);
 
-    print('${duration.hour}');
-    if (duration.hour < 13) {
-      amPmFormat = "오전";
+    if (duration.hour < 12) {
+      setState(() {
+        amPmFormat = "오전";
+      });
+    } else {
+      setState(() {
+        amPmFormat = "오후";
+      });
     }
-    amPmFormat = "오후";
 
-
-    return '${amPmFormat} ${timeFormat}';
+    return '$amPmFormat $timeFormat';
   }
 
   ElevatedButton yearSelectButton(BuildContext context, double textSize) {
@@ -93,16 +212,14 @@ class _RoomDetailState extends State<RoomDetail> {
     double width = MediaQuery.of(context).size.width;
     double textSize = width * 0.05;
 
-
     return ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.transparent),
           elevation: MaterialStateProperty.all(0),
           overlayColor: MaterialStateProperty.all(Colors.transparent),
-          shadowColor:
-              MaterialStateProperty.all(Colors.transparent), // 그림자 색을 투명으로 설정
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
           padding: MaterialStateProperty.resolveWith((states) {
-            return EdgeInsets.only(right: width/20);
+            return EdgeInsets.only(right: width / 90);
           }),
         ),
         onPressed: () async {
@@ -128,7 +245,7 @@ class _RoomDetailState extends State<RoomDetail> {
           }
         },
         child: Text(
-          "${selectedDateForDate.year} - ${selectedDateForDate.month} - ${selectedDateForDate.day} - ${weekDayFormatting(selectedDateForDate.weekday)}",
+          "${selectedDateForDate.year}. ${selectedDateForDate.month}. ${selectedDateForDate.day}. ${weekDayFormatting(selectedDateForDate.weekday)}",
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w400,
@@ -171,10 +288,8 @@ class _RoomDetailState extends State<RoomDetail> {
       onPressed: () {
         showCupertinoModalPopup<void>(
           context: context,
-          builder: (BuildContext context) //{
-              =>
-              Container(
-            height: width/2,
+          builder: (BuildContext context) => Container(
+            height: width/1.5,
             padding: const EdgeInsets.only(top: 1.0),
             margin: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -199,10 +314,10 @@ class _RoomDetailState extends State<RoomDetail> {
                       selectedDateForDate.month,
                       selectedDateForDate.day,
                       selectedDateAtTime.hour,
-                      selectedDateAtTime.minute % 60);
+                      0);
 
                   setState(() {
-                    durationForm = changeDurationForm(width, selectedFullDate);
+                    durationForm = changeDurationForm(selectedFullDate);
                   });
                 },
               ),
@@ -211,10 +326,8 @@ class _RoomDetailState extends State<RoomDetail> {
         );
       },
       child: Text(
-        durationForm = changeDurationForm(width, selectedFullDate),
-
-
-        semanticsLabel: "$durationForm",
+        durationForm = changeDurationForm(selectedFullDate),
+        semanticsLabel: durationForm,
         style: TextStyle(
           fontWeight: FontWeight.w400,
           color: Colors.black,
@@ -238,4 +351,11 @@ class _RoomDetailState extends State<RoomDetail> {
 
     return true;
   }
+}
+
+Icon timeIcon(double textSize) {
+  return Icon(
+    Icons.access_time_outlined,
+    size: textSize,
+  );
 }
