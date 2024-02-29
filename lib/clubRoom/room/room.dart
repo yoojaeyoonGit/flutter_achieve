@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:m2/clubRoom/room_detail.dart';
+import 'package:m2/clubRoom/room/room_detail.dart';
 
 class Room extends StatefulWidget {
   final String roomName;
