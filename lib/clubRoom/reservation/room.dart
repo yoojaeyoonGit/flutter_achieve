@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:m2/clubRoom/room/room_detail.dart';
+import 'package:m2/clubRoom/reservation/room_detail.dart';
 
 class Room extends StatefulWidget {
   final String roomName;
@@ -65,7 +65,7 @@ class _RoomState extends State<Room> {
                     height: 10,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(widget.description),
                   )
                 ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:m2/clubRoom/room/room.dart';
 
 class NoticeBoardPage extends StatefulWidget {
   const NoticeBoardPage({super.key});

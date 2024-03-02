@@ -1,8 +1,12 @@
 // import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:m2/clubRoom/button/time_select_button.dart';
-import 'package:m2/clubRoom/button/year_select_button.dart';
+import 'package:m2/clubRoom/reservation/Avail_reservation_time_check.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:m2/models/email_request_model.dart';
 
 class RoomDetail extends StatefulWidget {
   final String roomName;
@@ -32,11 +36,11 @@ class _RoomDetailState extends State<RoomDetail> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
         ),
-        // height: 10,
         width: width / 1.4,
         child: Image.network(
             "https://yt3.googleusercontent.com/ytc/AIf8zZR8VBlMDZi6X85aGN_jcLIojmXoqPG1vrx93Nmj6w=s900-c-k-c0x00ffffff-no-rj",
-            width: width / 2,
+            width: width,
+            // width / 2,
             fit: BoxFit.cover),
       ),
       Container(
@@ -48,7 +52,8 @@ class _RoomDetailState extends State<RoomDetail> {
         child: Image.network(
             "https://static01.nyt.com/images/2019/05/31/us/31applehq-01alt/31applehq-01alt-superJumbo.jpg?quality=75&auto=webp",
             height: width / 2,
-            width: 10,
+            width: width,
+            // 10,
             fit: BoxFit.cover),
       ),
       Container(
@@ -60,7 +65,8 @@ class _RoomDetailState extends State<RoomDetail> {
         child: Image.network(
             "https://blog.spoongraphics.co.uk/wp-content/uploads/2009/apple-wallpaper/Picture-5.jpg",
             height: width / 2,
-            width: 10,
+            width: width,
+            // width: 10,
             fit: BoxFit.cover),
       ),
     ];
@@ -99,19 +105,18 @@ class _RoomDetailState extends State<RoomDetail> {
           ),
           Container(
             // color: Colors.red,
-            height: height / 1.9,
+            height: height * 0.56,
             child: Padding(
-              padding: EdgeInsets.only(left: 15.0, top: height * 0.03),
+              padding: const EdgeInsets.only(left: 30.0, right: 30.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     height: height * 0.15,
-                    color: Colors.red,
                     child: const Column(
                       children: [
-                        Text("예약 가능 시간 확인"),
+                        AvailReservationTime(),
                       ],
                     ),
                   ),
@@ -125,14 +130,13 @@ class _RoomDetailState extends State<RoomDetail> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 13.0),
-                        child: timeIcon(textSize),
+                        child: Icon(
+                          Icons.access_time_outlined,
+                          size: textSize,
+                        ),
                       ),
-                      YearSelectButton(selectedFullDate: DateTime.now()),
-                      TimeSelectButton(
-                          dateForm: durationForm,
-                          selectedDateAtTime: selectedDateAtTime,
-                          selectedDateForDate: selectedDateForDate,
-                          selectedFullDate: selectedFullDate)
+                      yearSelectButton(context, textSize),
+                      timeSelectedButton(textSize),
                     ],
                   ),
                   SizedBox(
@@ -145,12 +149,15 @@ class _RoomDetailState extends State<RoomDetail> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(bottom: 9),
+                    padding: const EdgeInsets.only(bottom: 9),
                     child: Row(
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(right: 10.0, top: 15),
-                          child: timeIcon(textSize),
+                          child: Icon(
+                            Icons.timer_off_outlined,
+                            size: textSize,
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(right: width / 20, top: 15),
@@ -173,6 +180,53 @@ class _RoomDetailState extends State<RoomDetail> {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 30),
+                    child: Center(
+                      child: IconButton(
+                          onPressed: () async {
+                            final url = Uri.parse(
+                                "https://achieve-project.store/api/email/verification/request");
+                            Map data = {"email": "jaeyoon321@naver.com"};
+
+                            // {
+                            //   "meetingRoomId": 1,
+                            //   "members": 5,
+                            //   "reservationStartTime": "2023-12-09T17:49:52",
+                            //   "reservationEndTime": "2023-12-02T15:49:52"
+                            // }
+
+                            var body = json.encode(data);
+
+                            final response = await http.post(url,
+                                headers: {"Content-Type": "application/json"},
+                                body: body);
+
+                            if (response.statusCode == 200) {
+                              final dynamic emailRequestApply = jsonDecode(response.body);
+                              EmailRequestModel message = EmailRequestModel.fromJson(emailRequestApply);
+                            } else {
+                              print("요청 실패");
+                            }
+                          },
+                          icon: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            width: 100,
+                            height: 40,
+                            child: const Center(
+                              child: Text(
+                                "신청",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          )),
                     ),
                   )
                 ],
@@ -224,51 +278,54 @@ class _RoomDetailState extends State<RoomDetail> {
     return '$amPmFormat $timeFormat';
   }
 
-  // ElevatedButton yearSelectButton(BuildContext context, double textSize) {
-  //   DateTime? selectedDate;
-  //   double width = MediaQuery.of(context).size.width;
-  //   double textSize = width * 0.05;
-  //
-  //   return ElevatedButton(
-  //       style: ButtonStyle(
-  //         backgroundColor: MaterialStateProperty.all(Colors.transparent),
-  //         elevation: MaterialStateProperty.all(0),
-  //         overlayColor: MaterialStateProperty.all(Colors.transparent),
-  //         shadowColor: MaterialStateProperty.all(Colors.transparent),
-  //         padding: MaterialStateProperty.resolveWith((states) {
-  //           return EdgeInsets.only(right: width / 90);
-  //         }),
-  //       ),
-  //       onPressed: () async {
-  //         selectedDate = await showDatePicker(
-  //             context: context,
-  //             firstDate: DateTime(DateTime.now().year),
-  //             lastDate: DateTime(DateTime.now().year + 1));
-  //
-  //         if (selectedDate != null) {
-  //           selectedDateForDate = DateTime(
-  //               selectedDate!.year, selectedDate!.month, selectedDate!.day);
-  //
-  //           setState(() {
-  //             selectedFullDate = DateTime(
-  //               selectedDateForDate.year,
-  //               selectedDateForDate.month,
-  //               selectedDateForDate.day,
-  //               selectedDateForDate.weekday,
-  //               selectedDateAtTime.hour,
-  //               selectedDateAtTime.minute % 60,
-  //             );
-  //           });
-  //         }
-  //       },
-  //       child: Text(
-  //         "${selectedDateForDate.year}. ${selectedDateForDate.month}. ${selectedDateForDate.day}. ${weekDayFormatting(selectedDateForDate.weekday)}",
-  //         style: TextStyle(
-  //             color: Colors.black,
-  //             fontWeight: FontWeight.w400,
-  //             fontSize: textSize),
-  //       ));
-  // }
+  ElevatedButton yearSelectButton(BuildContext context, double textSize) {
+    DateTime? selectedDate;
+    double width = MediaQuery.of(context).size.width;
+    double textSize = width * 0.05;
+
+    return ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.transparent),
+          elevation: MaterialStateProperty.all(0),
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          padding: MaterialStateProperty.resolveWith((states) {
+            return EdgeInsets.only(right: width / 90);
+          }),
+        ),
+        onPressed: () async {
+          selectedDate = await showDatePicker(
+              context: context,
+              firstDate: DateTime(DateTime.now().year),
+              lastDate: DateTime(DateTime.now().year + 1));
+
+          if (selectedDate != null) {
+            selectedDateForDate = DateTime(
+                selectedDate!.year, selectedDate!.month, selectedDate!.day);
+
+            setState(() {
+              selectedFullDate = DateTime(
+                selectedDateForDate.year,
+                selectedDateForDate.month,
+                selectedDateForDate.day,
+                selectedDateForDate.weekday,
+                selectedDateAtTime.hour,
+                selectedDateAtTime.minute % 60,
+              );
+            });
+          }
+        },
+        child: Text(
+          "${selectedDateForDate.year}. "
+          "${selectedDateForDate.month}. "
+          "${selectedDateForDate.day}. "
+          "${weekDayFormatting(selectedDateForDate.weekday)}",
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+              fontSize: textSize),
+        ));
+  }
 
   String weekDayFormatting(int weekDay) {
     if (weekDay == 1) {
@@ -298,61 +355,61 @@ class _RoomDetailState extends State<RoomDetail> {
     return "일요일";
   }
 
-  // CupertinoButton timeSelectedButton(double textSize) {
-  //   double width = MediaQuery.of(context).size.width;
-  //
-  //   return CupertinoButton(
-  //     onPressed: () {
-  //       showCupertinoModalPopup<void>(
-  //         context: context,
-  //         builder: (BuildContext context) => Container(
-  //           height: width/1.5,
-  //           padding: const EdgeInsets.only(top: 1.0),
-  //           margin: EdgeInsets.only(
-  //             bottom: MediaQuery.of(context).viewInsets.bottom,
-  //           ),
-  //           color: CupertinoColors.systemBackground.resolveFrom(context),
-  //           child: SafeArea(
-  //             top: false,
-  //             child: CupertinoDatePicker(
-  //               mode: CupertinoDatePickerMode.time,
-  //               initialDateTime: selectedDateAtTime,
-  //               onDateTimeChanged: (DateTime newDateTime) {
-  //                 selectedDateAtTime = DateTime(
-  //                     selectedDateForDate.year,
-  //                     selectedDateForDate.month,
-  //                     selectedDateForDate.day,
-  //                     newDateTime.hour,
-  //                     0,
-  //                     0);
-  //
-  //                 selectedFullDate = DateTime(
-  //                     selectedDateForDate.year,
-  //                     selectedDateForDate.month,
-  //                     selectedDateForDate.day,
-  //                     selectedDateAtTime.hour,
-  //                     0);
-  //
-  //                 setState(() {
-  //                   durationForm = changeDurationForm(selectedFullDate);
-  //                 });
-  //               },
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //     child: Text(
-  //       durationForm = changeDurationForm(selectedFullDate),
-  //       semanticsLabel: durationForm,
-  //       style: TextStyle(
-  //         fontWeight: FontWeight.w400,
-  //         color: Colors.black,
-  //         fontSize: textSize,
-  //       ),
-  //     ),
-  //   );
-  // }
+  CupertinoButton timeSelectedButton(double textSize) {
+    double width = MediaQuery.of(context).size.width;
+
+    return CupertinoButton(
+      onPressed: () {
+        showCupertinoModalPopup<void>(
+          context: context,
+          builder: (BuildContext context) => Container(
+            height: width / 1.5,
+            padding: const EdgeInsets.only(top: 1.0),
+            margin: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            color: CupertinoColors.systemBackground.resolveFrom(context),
+            child: SafeArea(
+              top: false,
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.time,
+                initialDateTime: selectedDateAtTime,
+                onDateTimeChanged: (DateTime newDateTime) {
+                  selectedDateAtTime = DateTime(
+                      selectedDateForDate.year,
+                      selectedDateForDate.month,
+                      selectedDateForDate.day,
+                      newDateTime.hour,
+                      0,
+                      0);
+
+                  selectedFullDate = DateTime(
+                      selectedDateForDate.year,
+                      selectedDateForDate.month,
+                      selectedDateForDate.day,
+                      selectedDateAtTime.hour,
+                      0);
+
+                  setState(() {
+                    durationForm = changeDurationForm(selectedFullDate);
+                  });
+                },
+              ),
+            ),
+          ),
+        );
+      },
+      child: Text(
+        durationForm = changeDurationForm(selectedFullDate),
+        semanticsLabel: durationForm,
+        style: TextStyle(
+          fontWeight: FontWeight.w400,
+          color: Colors.black,
+          fontSize: textSize,
+        ),
+      ),
+    );
+  }
 
   bool isTimeAllowed(Duration newDuration) {
     Duration one = const Duration(hours: 3, minutes: 30);
@@ -368,11 +425,4 @@ class _RoomDetailState extends State<RoomDetail> {
 
     return true;
   }
-}
-
-Icon timeIcon(double textSize) {
-  return Icon(
-    Icons.access_time_outlined,
-    size: textSize,
-  );
 }

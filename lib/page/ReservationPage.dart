@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:m2/clubRoom/room/room.dart';
+import 'package:m2/clubRoom/reservation/room.dart';
 
 class ReservationPage extends StatefulWidget {
   const ReservationPage({super.key});
