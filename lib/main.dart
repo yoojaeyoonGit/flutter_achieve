@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:m2/page/NoticeBoardPage.dart';
 import 'package:m2/page/ReservationPage.dart';
+import 'package:m2/page/login_page.dart';
 import 'package:m2/widget/basicFuntionbutton.dart';
 
 enum Status {
@@ -81,11 +82,14 @@ class _AchieveState extends State<Achieve> {
                 children: [
                   GestureDetector(
                     onTap: () {
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const ReservationPage()),
+                            // builder: (context) => const ReservationPage()),
+                            builder: (context) => const LoginPage()),
                       );
+
                     },
                     child: BasicFunction(
                       height: height,
