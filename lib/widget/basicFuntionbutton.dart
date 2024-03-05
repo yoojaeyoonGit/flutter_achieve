@@ -24,6 +24,23 @@ class BasicFunction extends StatelessWidget {
         ? Icons.book_online_outlined
         : Icons.notification_important_outlined;
 
+    if (status == Status.reservation) {
+      icon = Icons.book_online_outlined;
+    }
+
+    if (status == Status.notification) {
+      icon = Icons.notification_important_outlined;
+    }
+
+    if (status == Status.signUp) {
+      icon = Icons.perm_identity_outlined;
+    }
+
+    if (status == Status.signIn) {
+      icon = Icons.arrow_right_alt_outlined;
+    }
+
+
     return Container(
       height: height,
       width: width,
