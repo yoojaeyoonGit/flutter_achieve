@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:m2/main.dart';
 import 'package:m2/page/NoticeBoardPage.dart';
 import 'package:m2/page/ReservationPage.dart';
-import 'package:m2/page/login_page.dart';
-import 'package:m2/page/sign_up_page.dart';
 import 'package:m2/widget/basicFuntionbutton.dart';
 
 class HomePage extends StatefulWidget {

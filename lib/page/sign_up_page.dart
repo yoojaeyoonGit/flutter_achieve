@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -29,14 +27,8 @@ class _LoginPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     final List<String> dropdownItems = ['Techeer', 'Techeer Partners'];
     return Scaffold(
@@ -79,11 +71,10 @@ class _LoginPageState extends State<SignUpPage> {
                             underline: Container(),
                             value: selectedAffiliation,
                             items: dropdownItems
-                                .map((e) =>
-                                DropdownMenuItem(
-                                  value: e,
-                                  child: Text(e),
-                                ))
+                                .map((e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(e),
+                                    ))
                                 .toList(),
                             onChanged: (String? e) {
                               setState(() {
@@ -111,12 +102,12 @@ class _LoginPageState extends State<SignUpPage> {
                                   hintStyle: TextStyle(color: emailColor),
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: emailColor, // 다른 색상으로 변경
+                                      color: emailColor,
                                     ),
                                   ),
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: emailColor, // 원하는 색상으로 변경
+                                      color: emailColor,
                                     ),
                                   )),
                             ),
@@ -155,7 +146,8 @@ class _LoginPageState extends State<SignUpPage> {
                                 controller: _controllerAuthCode,
                                 decoration: InputDecoration(
                                   hintText: "인증 번호",
-                                  hintStyle: TextStyle(color: Colors.black),
+                                  hintStyle:
+                                      const TextStyle(color: Colors.black),
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                       color: emailAuthCodeColor,
@@ -182,7 +174,7 @@ class _LoginPageState extends State<SignUpPage> {
                                 child: TextButton(
                                     onPressed: () async {
                                       final url = Uri.parse(
-                                        // "https://achieve-project.store/api/email/verification/confirm"
+                                          // "https://achieve-project.store/api/email/verification/confirm"
                                           "http://localhost:8080/api/email/verification/confirm");
 
                                       Map data = {
@@ -200,11 +192,11 @@ class _LoginPageState extends State<SignUpPage> {
 
                                       if (response.statusCode == 200) {
                                         final dynamic emailRequestApply =
-                                        jsonDecode(utf8
-                                            .decode(response.bodyBytes));
+                                            jsonDecode(utf8
+                                                .decode(response.bodyBytes));
                                         EmailRequestModel message =
-                                        EmailRequestModel.fromJson(
-                                            emailRequestApply);
+                                            EmailRequestModel.fromJson(
+                                                emailRequestApply);
 
                                         setState(() {
                                           emailAuthCodeColor = Colors.black;
@@ -214,11 +206,11 @@ class _LoginPageState extends State<SignUpPage> {
                                         });
                                       } else {
                                         final dynamic emailErrorRequest =
-                                        jsonDecode(utf8
-                                            .decode(response.bodyBytes));
+                                            jsonDecode(utf8
+                                                .decode(response.bodyBytes));
                                         ErrorRequestModel message =
-                                        ErrorRequestModel.fromJson(
-                                            emailErrorRequest);
+                                            ErrorRequestModel.fromJson(
+                                                emailErrorRequest);
                                         if (message.errorMessage ==
                                             "이미 인증된 이메일입니다.") {
                                           setState(() {
@@ -230,7 +222,6 @@ class _LoginPageState extends State<SignUpPage> {
                                           });
                                         }
                                       }
-                                      ;
                                     },
                                     child: const Text(
                                       "전송",
@@ -258,7 +249,7 @@ class _LoginPageState extends State<SignUpPage> {
                 child: TextButton(
                     onPressed: () async {
                       final url = Uri.parse(
-                        // "https://achieve-project.store/api/email/verification/confirm"
+                          // "https://achieve-project.store/api/email/verification/confirm"
                           "http://localhost:8080/api/user/sign-up");
 
                       Map data = {
@@ -286,9 +277,9 @@ class _LoginPageState extends State<SignUpPage> {
                         });
                       } else {
                         final signUpRequestApply =
-                        jsonDecode(utf8.decode(response.bodyBytes));
+                            jsonDecode(utf8.decode(response.bodyBytes));
                         ErrorRequestModel message =
-                        ErrorRequestModel.fromJson(signUpRequestApply);
+                            ErrorRequestModel.fromJson(signUpRequestApply);
                         if (message.errorMessage == "인증되지 않은 Email입니다.") {
                           setState(() {
                             emailAuthCodeColor = Colors.red;
@@ -344,9 +335,9 @@ class _LoginPageState extends State<SignUpPage> {
       });
     } else {
       final url =
-      Uri.parse("http://localhost:8080/api/email/verification/request");
+          Uri.parse("http://localhost:8080/api/email/verification/request");
       // Uri.parse("https://achieve-project.store/api/email/verification/request");
-      Map data = {"email": "$email"};
+      Map data = {"email": email};
 
       var body = json.encode(data);
 
@@ -356,7 +347,7 @@ class _LoginPageState extends State<SignUpPage> {
       if (response.statusCode == 200) {
         final dynamic emailRequestApply = jsonDecode(response.body);
         EmailRequestModel message =
-        EmailRequestModel.fromJson(emailRequestApply);
+            EmailRequestModel.fromJson(emailRequestApply);
 
         setState(() {
           emailData = "responsed";
@@ -373,10 +364,10 @@ class _LoginPageState extends State<SignUpPage> {
 
   void sendAuthCode(String code, String email, Color emailAuthColor) async {
     final url = Uri.parse(
-      // "https://achieve-project.store/api/email/verification/confirm"
+        // "https://achieve-project.store/api/email/verification/confirm"
         "http://localhost:8080/api/email/verification/confirm");
 
-    Map data = {"code": "$code", "email": "$email"};
+    Map data = {"code": code, "email": email};
 
     var body = json.encode(data);
 
@@ -399,10 +390,10 @@ class _LoginPageState extends State<SignUpPage> {
     }
   }
 
-  void sendSignUpRequest(String name, String email, String password,
-      String affiliation) async {
+  void sendSignUpRequest(
+      String name, String email, String password, String affiliation) async {
     final url = Uri.parse(
-      // "https://achieve-project.store/api/email/verification/confirm"
+        // "https://achieve-project.store/api/email/verification/confirm"
         "http://localhost:8080/api/user/sign-up");
 
     Map data = {

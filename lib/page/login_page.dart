@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:m2/log_in_status.dart';
@@ -20,7 +19,7 @@ class _SignUpPageState extends State<LoginPage> {
   final AuthStorage secureStorage = AuthStorage();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-  final UserProvider userProvider = new UserProvider();
+  final UserProvider userProvider = UserProvider();
 
   @override
   Widget build(BuildContext context) {
