@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:m2/clubRoom/reservation/Avail_reservation_time_check.dart';
 
 import 'package:http/http.dart' as http;
@@ -10,8 +11,9 @@ import 'package:m2/models/email_request_model.dart';
 
 class RoomDetail extends StatefulWidget {
   final String roomName;
+  final int id;
 
-  const RoomDetail({super.key, required this.roomName});
+  const RoomDetail({super.key, required this.roomName, required this.id});
 
   @override
   State<RoomDetail> createState() => _RoomDetailState();
@@ -88,23 +90,26 @@ class _RoomDetailState extends State<RoomDetail> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: images.length,
-                // padding: const EdgeInsets.only(bottom: 300),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                        top: 20, bottom: 40, left: 10, right: 10),
-                    child: images[index],
-                  );
-                },
-                separatorBuilder: (context, index) => const SizedBox(
-                      width: 20,
-                    )),
+            child: Hero(
+              tag: widget.id,
+              child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: images.length,
+                  // padding: const EdgeInsets.only(bottom: 300),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          top: 20, bottom: 40, left: 10, right: 10),
+                      child: images[index],
+                    );
+                  },
+                  separatorBuilder: (context, index) => const SizedBox(
+                        width: 20,
+                      )),
+            ),
           ),
           Container(
-            // color: Colors.red,
+            width: 900,
             height: height * 0.56,
             child: Padding(
               padding: const EdgeInsets.only(left: 30.0, right: 30.0),
@@ -113,6 +118,7 @@ class _RoomDetailState extends State<RoomDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
+                    width: width,
                     height: height * 0.15,
                     child: const Column(
                       children: [

@@ -11,13 +11,8 @@ class AuthStorage {
     }
   }
 
-  Future<void> readAccessToken() async {
-    try {
-      final accessToken = await storage.read(key: "ACCESS_TOKEN");
-      print("accessToken: $accessToken ");
-    } catch (e) {
-      print("ACCESS_TOKEN 읽기 실패");
-    }
+  Future<String?> readAccessToken() async {
+      return await storage.read(key: "ACCESS_TOKEN");
   }
 
   Future<void> saveRefreshToken(String refreshToken) async {

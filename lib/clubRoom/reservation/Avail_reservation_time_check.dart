@@ -11,13 +11,13 @@ class _AvailReservationTimeState extends State<AvailReservationTime> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     List<Padding> reservationAvailList = List.generate(
         40,
         (index) => const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text("2023년 11월 12일"),
             ));
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -30,7 +30,6 @@ class _AvailReservationTimeState extends State<AvailReservationTime> {
                     content: Container(
                       height: height / 2,
                       width: 100,
-                      // color: Colors.blue,
                       child: ListView.separated(
                           itemBuilder: (context, index) {
                             return Center(child: reservationAvailList[index]);
@@ -57,7 +56,7 @@ class _AvailReservationTimeState extends State<AvailReservationTime> {
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                width: 300,
+                width: width * 0.7,
                 height: 40,
                 child: const Center(
                     child: Text(

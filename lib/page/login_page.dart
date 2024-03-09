@@ -92,8 +92,8 @@ class _SignUpPageState extends State<LoginPage> {
                                 MaterialPageRoute(builder: (context) => HomePage()),
                               );
                             }
-                            secureStorage.readRefreshToken();
-                            secureStorage.readAccessToken();
+                            // secureStorage.readRefreshToken();
+                            // secureStorage.readAccessToken();
                           });
                         } else {
                           final signUpRequestApply =
