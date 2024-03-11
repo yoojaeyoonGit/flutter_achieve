@@ -8,6 +8,7 @@ import 'package:m2/clubRoom/reservation/Avail_reservation_time_check.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:m2/models/email_request_model.dart';
+import 'package:m2/service/ApiService.dart';
 
 class RoomDetail extends StatefulWidget {
   final String roomName;
@@ -25,6 +26,18 @@ class _RoomDetailState extends State<RoomDetail> {
   late DateTime endTime = DateTime.now();
   DateTime selectedFullDate = DateTime.now();
   String durationForm = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeDates();
+  }
+
+  void _initializeDates() {
+    DateTime now = DateTime.now();
+
+    selectedFullDate = DateTime(now.year, now.month, now.day, now.hour, 0, 1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -211,8 +224,10 @@ class _RoomDetailState extends State<RoomDetail> {
                                 body: body);
 
                             if (response.statusCode == 200) {
-                              final dynamic emailRequestApply = jsonDecode(response.body);
-                              EmailRequestModel message = EmailRequestModel.fromJson(emailRequestApply);
+                              final dynamic emailRequestApply =
+                                  jsonDecode(response.body);
+                              EmailRequestModel message =
+                                  EmailRequestModel.fromJson(emailRequestApply);
                             } else {
                               print("요청 실패");
                             }
@@ -224,12 +239,19 @@ class _RoomDetailState extends State<RoomDetail> {
                             ),
                             width: 100,
                             height: 40,
-                            child: const Center(
-                              child: Text(
-                                "신청",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700),
+                            child: Center(
+                              child: TextButton(
+                                onPressed: () {
+                                  print(selectedFullDate);
+                                  print(selectedFullDate.add(const Duration(hours: 1)).subtract(const Duration(seconds: 1)));
+                                  ApiService.makeReservation(widget.id, selectedFullDate, selectedFullDate.add(const Duration(hours: 1)).subtract(const Duration(seconds: 1)));
+                                },
+                                child: const Text(
+                                  "예약",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700),
+                                ),
                               ),
                             ),
                           )),
@@ -241,8 +263,6 @@ class _RoomDetailState extends State<RoomDetail> {
           ),
         ],
       ),
-
-
     );
   }
 
@@ -396,7 +416,8 @@ class _RoomDetailState extends State<RoomDetail> {
                       selectedDateForDate.month,
                       selectedDateForDate.day,
                       selectedDateAtTime.hour,
-                      0);
+                      0,
+                      1);
 
                   setState(() {
                     durationForm = changeDurationForm(selectedFullDate);
@@ -417,20 +438,5 @@ class _RoomDetailState extends State<RoomDetail> {
         ),
       ),
     );
-  }
-
-  bool isTimeAllowed(Duration newDuration) {
-    Duration one = const Duration(hours: 3, minutes: 30);
-    Duration two = const Duration(hours: 2, minutes: 30);
-
-    if (newDuration == one) {
-      return false;
-    }
-
-    if (newDuration == two) {
-      return false;
-    }
-
-    return true;
   }
 }

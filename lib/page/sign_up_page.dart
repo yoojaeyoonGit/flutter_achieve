@@ -176,7 +176,7 @@ class _LoginPageState extends State<SignUpPage> {
                                       final url = Uri.parse(
                                           // "https://achieve-project.store/api/email/verification/confirm"
                                           "http://localhost:8080/api/email/verification/confirm");
-
+                                          // "http://169.254.158.201:8080/api/email/verification/confirm");
                                       Map data = {
                                         "code": _controllerAuthCode.text,
                                         "email": _controllerEmail.text
@@ -251,6 +251,7 @@ class _LoginPageState extends State<SignUpPage> {
                       final url = Uri.parse(
                           // "https://achieve-project.store/api/email/verification/confirm"
                           "http://localhost:8080/api/user/sign-up");
+                          // "http://169.254.158.201:8080/api/user/sign-up");
 
                       Map data = {
                         "name": _controllerName.text,
@@ -366,6 +367,7 @@ class _LoginPageState extends State<SignUpPage> {
     final url = Uri.parse(
         // "https://achieve-project.store/api/email/verification/confirm"
         "http://localhost:8080/api/email/verification/confirm");
+        // "http://169.254.158.201:8080/api/email/verification/confirm");
 
     Map data = {"code": code, "email": email};
 
@@ -395,6 +397,7 @@ class _LoginPageState extends State<SignUpPage> {
     final url = Uri.parse(
         // "https://achieve-project.store/api/email/verification/confirm"
         "http://localhost:8080/api/user/sign-up");
+        // "http://169.254.158.201:8080/api/user/sign-up");
 
     Map data = {
       "name": name,

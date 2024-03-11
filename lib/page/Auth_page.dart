@@ -85,8 +85,7 @@ class _AuthPageState extends State<AuthPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LoginPage()),
-                        // builder: (context) => NoticeBoardPage()),
+                            builder: (context) => const LoginPage()),
                       );
                     },
                     child: BasicFunction(

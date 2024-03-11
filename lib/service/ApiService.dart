@@ -11,10 +11,11 @@ class ApiService {
     final AuthStorage authStorage = AuthStorage();
 
     List<RoomModel> roomInstances = [];
-    final Url = Uri.parse("http://localhost:8080/api/meetingRooms");
+    // final Url = Uri.parse("http://localhost:8080/api/meetingRooms");
+    final url = Uri.parse("http://localhost:8080/api/meetingRooms");
     String? accessToken = await authStorage.readAccessToken();
 
-    final response = await http.get(Url, headers: {
+    final response = await http.get(url, headers: {
       "Authorization": '$accessToken'
     });
 
@@ -28,5 +29,38 @@ class ApiService {
       return roomInstances;
     }
     throw Error();
+  }
+
+
+  static void makeReservation(int id, DateTime startTime, DateTime endTime) async {
+    final AuthStorage authStorage = AuthStorage();
+
+    // final Url = Uri.parse("http://localhost:8080/api/meetingRooms");
+    final url = Uri.parse("http://localhost:8080/api/reservation");
+    String? accessToken = await authStorage.readAccessToken();
+    String startTimeModified = startTime.toString().replaceFirst(" ", "T");
+    String endTimeModified = endTime.toString().replaceFirst(" ", "T");
+
+    Map data = {
+      "meetingRoomId" : id,
+      "members" : 2,
+      "reservationStartTime": startTimeModified,
+      "reservationEndTime": endTimeModified
+  };
+
+    var body = json.encode(data);
+
+    final response = await http.post(url,
+        headers: {
+        "Authorization": '$accessToken',
+        "Content-Type": "application/json"
+        },
+        body: body);
+
+    if (response.statusCode == 201) {
+      print("reservation finished");
+    } else {
+      throw Error();
+    }
   }
 }

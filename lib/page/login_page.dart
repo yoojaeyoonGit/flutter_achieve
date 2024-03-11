@@ -60,15 +60,13 @@ class _SignUpPageState extends State<LoginPage> {
                   ),
                   child: TextButton(
                       onPressed: () async {
-                        final url = Uri.parse(
-                            // "https://achieve-project.store/api/email/verification/confirm"
-                            "http://localhost:8080/api/user/sign-in");
-                        //
+                        final url = Uri.parse("http://localhost:8080/api/user/sign-in");
+                          // "https://achieve-project.store/api/email/verification/confirm"
+
                         Map data = {
                           "email": _controllerEmail.text,
                           "password": _controllerPassword.text,
                         };
-                        //
                         var body = json.encode(data);
 
                         final response = await http.post(url,
@@ -87,13 +85,13 @@ class _SignUpPageState extends State<LoginPage> {
                               secureStorage.saveAccessToken(accessToken);
                               secureStorage.saveRefreshToken(refreshToken);
                               userProvider.loginUser();
-                              Navigator.pushReplacement(
+                              Navigator.pushAndRemoveUntil(
                                 context,
-                                MaterialPageRoute(builder: (context) => HomePage()),
+                                MaterialPageRoute(
+                                    builder: (context) => const HomePage()),
+                                      (route) => false
                               );
                             }
-                            // secureStorage.readRefreshToken();
-                            // secureStorage.readAccessToken();
                           });
                         } else {
                           final signUpRequestApply =
