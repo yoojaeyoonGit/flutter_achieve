@@ -36,7 +36,18 @@ class _RoomDetailState extends State<RoomDetail> {
   void _initializeDates() {
     DateTime now = DateTime.now();
 
-    selectedFullDate = DateTime(now.year, now.month, now.day, now.hour, 0, 1);
+    if (DateTime.now().minute > 30) {
+      selectedFullDate =
+          DateTime(now.year, now.month, now.day, now.hour + 1, 0, 1);
+
+      selectedDateAtTime = DateTime(now.year, now.month, now.day, now.hour + 1, 0, 1);
+    } else {
+      selectedFullDate =
+          DateTime(now.year, now.month, now.day, now.hour, 0, 1);
+
+      selectedDateAtTime =
+          DateTime(now.year, now.month, now.day, now.hour, 0, 1);
+    }
   }
 
   @override
@@ -121,21 +132,21 @@ class _RoomDetailState extends State<RoomDetail> {
                       )),
             ),
           ),
-          Container(
+          SizedBox(
             width: 900,
             height: height * 0.56,
             child: Padding(
-              padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: width,
                     height: height * 0.15,
-                    child: const Column(
+                    child: Column(
                       children: [
-                        AvailReservationTime(),
+                        AvailReservationTime(id: widget.id),
                       ],
                     ),
                   ),
@@ -210,13 +221,6 @@ class _RoomDetailState extends State<RoomDetail> {
                                 "https://achieve-project.store/api/email/verification/request");
                             Map data = {"email": "jaeyoon321@naver.com"};
 
-                            // {
-                            //   "meetingRoomId": 1,
-                            //   "members": 5,
-                            //   "reservationStartTime": "2023-12-09T17:49:52",
-                            //   "reservationEndTime": "2023-12-02T15:49:52"
-                            // }
-
                             var body = json.encode(data);
 
                             final response = await http.post(url,
@@ -229,7 +233,7 @@ class _RoomDetailState extends State<RoomDetail> {
                               EmailRequestModel message =
                                   EmailRequestModel.fromJson(emailRequestApply);
                             } else {
-                              print("요청 실패");
+                              throw Error();
                             }
                           },
                           icon: Container(
@@ -243,8 +247,16 @@ class _RoomDetailState extends State<RoomDetail> {
                               child: TextButton(
                                 onPressed: () {
                                   print(selectedFullDate);
-                                  print(selectedFullDate.add(const Duration(hours: 1)).subtract(const Duration(seconds: 1)));
-                                  ApiService.makeReservation(widget.id, selectedFullDate, selectedFullDate.add(const Duration(hours: 1)).subtract(const Duration(seconds: 1)));
+                                  print("${selectedFullDate.add(
+                                      const Duration(hours: 1)).subtract(
+                                      const Duration(seconds: 1))}");
+                                  ApiService.makeReservation(
+                                      widget.id,
+                                      selectedFullDate,
+                                      selectedFullDate
+                                          .add(const Duration(hours: 1))
+                                          .subtract(
+                                              const Duration(seconds: 1)));
                                 },
                                 child: const Text(
                                   "예약",
@@ -329,16 +341,21 @@ class _RoomDetailState extends State<RoomDetail> {
 
           if (selectedDate != null) {
             selectedDateForDate = DateTime(
-                selectedDate!.year, selectedDate!.month, selectedDate!.day);
+                selectedDate!.year,
+                selectedDate!.month,
+                selectedDate!.day,
+                selectedFullDate.hour,
+                0,
+                1);
 
             setState(() {
               selectedFullDate = DateTime(
                 selectedDateForDate.year,
                 selectedDateForDate.month,
                 selectedDateForDate.day,
-                selectedDateForDate.weekday,
-                selectedDateAtTime.hour,
-                selectedDateAtTime.minute % 60,
+                selectedDateForDate.hour,
+                0,
+                1,
               );
             });
           }

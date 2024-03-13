@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:m2/models/Reserved_time_model.dart';
 import 'package:m2/models/room_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:m2/secure_storage.dart';
@@ -63,4 +64,31 @@ class ApiService {
       throw Error();
     }
   }
+
+  static Future<List<ReservedTimeModel>> getReservedTimes(int id) async {
+    final AuthStorage authStorage = AuthStorage();
+
+    List<ReservedTimeModel> reservedList = [];
+    // final Url = Uri.parse("http://localhost:8080/api/meetingRooms");
+    print("허허 $id");
+    final url = Uri.parse("http://localhost:8080/api/reservation/$id/avail");
+    String? accessToken = await authStorage.readAccessToken();
+
+    final response = await http.get(url, headers: {
+      "Authorization": '$accessToken'
+    });
+
+    if (response.statusCode == 200) {
+      final List<dynamic> reservedTimes = jsonDecode(utf8.decode(response.bodyBytes));
+
+      for (var time in reservedTimes) {
+        // print(ReservedTimeModel.fromJson(time).reservationStartTime);
+        reservedList.add(ReservedTimeModel.fromJson(time));
+      }
+
+      return reservedList;
+    }
+    throw Error();
+  }
+
 }
