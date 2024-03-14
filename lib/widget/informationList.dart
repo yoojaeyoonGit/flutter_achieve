@@ -45,6 +45,57 @@ List<Padding> reserveInformationList = [
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
+          "2. 예약 가능 시간 확인",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+        ),
+        SizedBox(
+          height: 2,
+        ),
+        Text('오른쪽 "예약 가능 시간" 버튼에서 예약 가능한 시간을 확인 하신 후 예약 부탁드립니다. \n\n'
+            '확인 후 아래 "예약 시간(선택)" 에서 날짜와 시간을 각각 선택합니다.'),
+      ],
+    ),
+  ),
+  const Padding(
+    padding: EdgeInsets.all(12.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "2. 예약 가능 시간 확인",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+        ),
+        SizedBox(
+          height: 2,
+        ),
+        Text('오른쪽 "예약 가능 시간" 버튼에서 예약 가능한 시간을 확인 하신 후 예약 부탁드립니다. \n\n'
+            '확인 후 아래 "예약 시간(선택)" 에서 날짜와 시간을 각각 선택합니다.'),
+      ],
+    ),
+  ),
+  const Padding(
+    padding: EdgeInsets.all(12.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "2. 예약 가능 시간 확인",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+        ),
+        SizedBox(
+          height: 2,
+        ),
+        Text('오른쪽 "예약 가능 시간" 버튼에서 예약 가능한 시간을 확인 하신 후 예약 부탁드립니다. \n\n'
+            '확인 후 아래 "예약 시간(선택)" 에서 날짜와 시간을 각각 선택합니다.'),
+      ],
+    ),
+  ),
+  const Padding(
+    padding: EdgeInsets.all(12.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
           "3. 예약 시간(선택)에서 시간 결정",
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
         ),

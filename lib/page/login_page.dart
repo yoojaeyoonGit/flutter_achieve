@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:m2/log_in_status.dart';
 import 'package:m2/page/home_page.dart';
 import 'package:m2/secure_storage.dart';
+import 'package:m2/service/ApiService.dart';
 
 import '../models/error_request_model.dart';
 
@@ -60,8 +61,7 @@ class _SignUpPageState extends State<LoginPage> {
                   ),
                   child: TextButton(
                       onPressed: () async {
-                        final url = Uri.parse("http://localhost:8080/api/user/sign-in");
-                          // "https://achieve-project.store/api/email/verification/confirm"
+                        final url = Uri.parse("${ApiService.baseUrl}/api/user/sign-in");
 
                         Map data = {
                           "email": _controllerEmail.text,
@@ -72,9 +72,7 @@ class _SignUpPageState extends State<LoginPage> {
                         final response = await http.post(url,
                             headers: {"Content-Type": "application/json"},
                             body: body);
-                        //
                         if (response.statusCode == 200) {
-                          // print(response.headers["refresh-token"]);
                           final accessToken = response.headers["authorization"];
                           final refreshToken =
                               response.headers["refresh-token"];

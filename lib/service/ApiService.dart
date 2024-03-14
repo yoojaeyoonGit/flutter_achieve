@@ -12,8 +12,7 @@ class ApiService {
     final AuthStorage authStorage = AuthStorage();
 
     List<RoomModel> roomInstances = [];
-    // final Url = Uri.parse("http://localhost:8080/api/meetingRooms");
-    final url = Uri.parse("http://localhost:8080/api/meetingRooms");
+    final url = Uri.parse("$baseUrl/api/meetingRooms");
     String? accessToken = await authStorage.readAccessToken();
 
     final response = await http.get(url, headers: {
@@ -36,8 +35,7 @@ class ApiService {
   static void makeReservation(int id, DateTime startTime, DateTime endTime) async {
     final AuthStorage authStorage = AuthStorage();
 
-    // final Url = Uri.parse("http://localhost:8080/api/meetingRooms");
-    final url = Uri.parse("http://localhost:8080/api/reservation");
+    final url = Uri.parse("$baseUrl/api/reservation");
     String? accessToken = await authStorage.readAccessToken();
     String startTimeModified = startTime.toString().replaceFirst(" ", "T");
     String endTimeModified = endTime.toString().replaceFirst(" ", "T");
@@ -65,13 +63,11 @@ class ApiService {
     }
   }
 
-  static Future<List<ReservedTimeModel>> getReservedTimes(int id) async {
+  static Future<List<ReservedTimeModel>> getReservedTimes(int id, String cursor) async {
     final AuthStorage authStorage = AuthStorage();
 
     List<ReservedTimeModel> reservedList = [];
-    // final Url = Uri.parse("http://localhost:8080/api/meetingRooms");
-    print("허허 $id");
-    final url = Uri.parse("http://localhost:8080/api/reservation/$id/avail");
+    final url = Uri.parse("$baseUrl/api/reservation/avail/$id?dateTime=$cursor");
     String? accessToken = await authStorage.readAccessToken();
 
     final response = await http.get(url, headers: {
@@ -82,9 +78,9 @@ class ApiService {
       final List<dynamic> reservedTimes = jsonDecode(utf8.decode(response.bodyBytes));
 
       for (var time in reservedTimes) {
-        // print(ReservedTimeModel.fromJson(time).reservationStartTime);
         reservedList.add(ReservedTimeModel.fromJson(time));
       }
+      // print('흠 ${cursor}');흠
 
       return reservedList;
     }

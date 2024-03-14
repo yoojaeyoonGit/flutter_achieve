@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:m2/models/error_request_model.dart';
 import 'package:m2/page/login_page.dart';
+import 'package:m2/service/ApiService.dart';
 
 import '../models/email_request_model.dart';
 
@@ -24,6 +25,7 @@ class _LoginPageState extends State<SignUpPage> {
   String emailData = "not yet";
   Color emailAuthCodeColor = Colors.black;
   Color emailColor = Colors.black;
+  // String baseUrl = "http://localhost:8080";
 
   @override
   Widget build(BuildContext context) {
@@ -174,9 +176,7 @@ class _LoginPageState extends State<SignUpPage> {
                                 child: TextButton(
                                     onPressed: () async {
                                       final url = Uri.parse(
-                                          // "https://achieve-project.store/api/email/verification/confirm"
-                                          "http://localhost:8080/api/email/verification/confirm");
-                                          // "http://169.254.158.201:8080/api/email/verification/confirm");
+                                          "${ApiService.baseUrl}/api/email/verification/confirm");
                                       Map data = {
                                         "code": _controllerAuthCode.text,
                                         "email": _controllerEmail.text
@@ -249,9 +249,7 @@ class _LoginPageState extends State<SignUpPage> {
                 child: TextButton(
                     onPressed: () async {
                       final url = Uri.parse(
-                          // "https://achieve-project.store/api/email/verification/confirm"
-                          "http://localhost:8080/api/user/sign-up");
-                          // "http://169.254.158.201:8080/api/user/sign-up");
+                          "${ApiService.baseUrl}/api/user/sign-up");
 
                       Map data = {
                         "name": _controllerName.text,
@@ -336,7 +334,7 @@ class _LoginPageState extends State<SignUpPage> {
       });
     } else {
       final url =
-          Uri.parse("http://localhost:8080/api/email/verification/request");
+          Uri.parse("${ApiService.baseUrl}/api/email/verification/request");
       // Uri.parse("https://achieve-project.store/api/email/verification/request");
       Map data = {"email": email};
 
@@ -365,9 +363,7 @@ class _LoginPageState extends State<SignUpPage> {
 
   void sendAuthCode(String code, String email, Color emailAuthColor) async {
     final url = Uri.parse(
-        // "https://achieve-project.store/api/email/verification/confirm"
-        "http://localhost:8080/api/email/verification/confirm");
-        // "http://169.254.158.201:8080/api/email/verification/confirm");
+        "${ApiService.baseUrl}/api/email/verification/confirm");
 
     Map data = {"code": code, "email": email};
 
@@ -395,9 +391,7 @@ class _LoginPageState extends State<SignUpPage> {
   void sendSignUpRequest(
       String name, String email, String password, String affiliation) async {
     final url = Uri.parse(
-        // "https://achieve-project.store/api/email/verification/confirm"
-        "http://localhost:8080/api/user/sign-up");
-        // "http://169.254.158.201:8080/api/user/sign-up");
+        "${ApiService.baseUrl}/api/user/sign-up");
 
     Map data = {
       "name": name,

@@ -142,7 +142,7 @@ class _RoomDetailState extends State<RoomDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: width,
+                    width: width * 2,
                     height: height * 0.15,
                     child: Column(
                       children: [
@@ -307,11 +307,11 @@ class _RoomDetailState extends State<RoomDetail> {
 
     if (duration.hour < 12) {
       setState(() {
-        amPmFormat = "오전";
+        amPmFormat = "AM";
       });
     } else {
       setState(() {
-        amPmFormat = "오후";
+        amPmFormat = "PM";
       });
     }
 
