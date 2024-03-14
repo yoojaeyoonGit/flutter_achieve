@@ -26,7 +26,6 @@ class _RoomState extends State<Room> {
         .of(context)
         .size
         .height;
-    print('${widget.roomName}');
 
     return GestureDetector(
       onTap: () {

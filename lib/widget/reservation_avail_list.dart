@@ -6,12 +6,13 @@ class ReservationAvailListView extends StatefulWidget {
   final int month;
   final int day;
 
-  const ReservationAvailListView(
-      {super.key,
-      required this.reservedAvailList,
-      required this.month,
-      required this.day,
-      required this.scrollController});
+  const ReservationAvailListView({
+    Key? key,
+    required this.reservedAvailList,
+    required this.month,
+    required this.day,
+    required this.scrollController,
+  }) : super(key: key);
 
   @override
   State<ReservationAvailListView> createState() =>
@@ -20,57 +21,33 @@ class ReservationAvailListView extends StatefulWidget {
 
 class _ReservationAvailListViewState extends State<ReservationAvailListView>
     with TickerProviderStateMixin {
-  // late ScrollController _scrollControllerForTime;
   late ScrollController _scrollController;
   bool isTop = true;
-  //
-  // @override
-  // initState() {
-  //   super.initState();
-  //   widget.scrollController.addListener(() {
-  //     if (mounted) {
-  //
-  //     }
-  //       setState(() {
-  //         if (widget.scrollController.offset > 0) {
-  //           isTop = false;
-  //         } else {
-  //           isTop = true;
-  //         }
-  //       });
-  //     });
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   widget.scrollController.dispose();
-  //   print('fd');
-  //   super.dispose();
-  // }
 
   @override
   void initState() {
     super.initState();
-    // scrollController가 null이 아니면 widget의 scrollController를 사용하고, null이면 새로운 ScrollController를 생성
     _scrollController = widget.scrollController ?? ScrollController();
-    _scrollController.addListener(() {
-      setState(() {
-        if (_scrollController.offset > 0) {
-          isTop = false;
-        } else {
-          isTop = true;
-        }
-      });
-    });
+    _scrollController.addListener(_scrollListener);
   }
 
   @override
   void dispose() {
-    // widget의 scrollController가 null이면 생성한 ScrollController를 dispose
+    _scrollController.removeListener(_scrollListener);
     if (widget.scrollController == null) {
       _scrollController.dispose();
     }
     super.dispose();
+  }
+
+  void _scrollListener() {
+    setState(() {
+      if (_scrollController.offset > 0) {
+        isTop = false;
+      } else {
+        isTop = true;
+      }
+    });
   }
 
   void scrollToEnd(ScrollController scrollController) {
@@ -107,16 +84,17 @@ class _ReservationAvailListViewState extends State<ReservationAvailListView>
                 child: Text(
                   "${widget.month}월 ${widget.day}일",
                   style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
           ),
           Expanded(
             child: ListView.builder(
-              controller: widget.scrollController,
+              controller: _scrollController,
               itemBuilder: (context, index) {
                 String time = widget.reservedAvailList[index];
                 return Center(
@@ -139,8 +117,8 @@ class _ReservationAvailListViewState extends State<ReservationAvailListView>
             child: IconButton(
               onPressed: () {
                 isTop
-                    ? scrollToEnd(widget.scrollController!)
-                    : scrollToStart(widget.scrollController!);
+                    ? scrollToEnd(_scrollController)
+                    : scrollToStart(_scrollController);
               },
               icon: isTop
                   ? const Icon(Icons.arrow_drop_down_circle)

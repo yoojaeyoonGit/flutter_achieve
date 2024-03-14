@@ -137,7 +137,6 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
       DateTime cursorDateTimeBefore =
           DateTime(time.year, time.month, time.day, 0, 0);
 
-      print(cursorDateTimeBefore);
       DateTime cursorDateTimeAfter =
           cursorDateTimeBefore.add(Duration(days: cursorDateNum));
 
