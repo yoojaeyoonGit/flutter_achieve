@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 
 class ReservationAvailListView extends StatefulWidget {
   final List<String> reservedAvailList;
-  final ScrollController? scrollController;
-  final int month;
-  final int day;
+  final int cursorDateNum;
 
   const ReservationAvailListView({
     Key? key,
     required this.reservedAvailList,
-    required this.month,
-    required this.day,
-    required this.scrollController,
+    required this.cursorDateNum,
   }) : super(key: key);
 
   @override
@@ -21,22 +17,19 @@ class ReservationAvailListView extends StatefulWidget {
 
 class _ReservationAvailListViewState extends State<ReservationAvailListView>
     with TickerProviderStateMixin {
-  late ScrollController _scrollController;
+  late final ScrollController _scrollController = ScrollController();
   bool isTop = true;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = widget.scrollController ?? ScrollController();
     _scrollController.addListener(_scrollListener);
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
-    if (widget.scrollController == null) {
-      _scrollController.dispose();
-    }
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -50,16 +43,16 @@ class _ReservationAvailListViewState extends State<ReservationAvailListView>
     });
   }
 
-  void scrollToEnd(ScrollController scrollController) {
-    if (scrollController.hasClients) {
-      final double maxScrollExtent = scrollController.position.maxScrollExtent;
-      scrollController.animateTo(maxScrollExtent,
+  void scrollToEnd() {
+    if (_scrollController.hasClients) {
+      final double maxScrollExtent = _scrollController.position.maxScrollExtent;
+      _scrollController.animateTo(maxScrollExtent,
           duration: const Duration(milliseconds: 100), curve: Curves.linear);
     }
   }
 
-  void scrollToStart(ScrollController scrollController) {
-    scrollController.animateTo(0,
+  void scrollToStart() {
+    _scrollController.animateTo(0,
         duration: const Duration(milliseconds: 100), curve: Curves.linear);
   }
 
@@ -67,7 +60,8 @@ class _ReservationAvailListViewState extends State<ReservationAvailListView>
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
+    DateTime dateTime = DateTime.now();
+    dateTime = DateTime.now().add(Duration(days: widget.cursorDateNum));
     return Expanded(
       child: Column(
         children: [
@@ -82,7 +76,7 @@ class _ReservationAvailListViewState extends State<ReservationAvailListView>
               ),
               child: Center(
                 child: Text(
-                  "${widget.month}월 ${widget.day}일",
+                  "${dateTime.month}월 ${dateTime.day}일",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -97,6 +91,7 @@ class _ReservationAvailListViewState extends State<ReservationAvailListView>
               controller: _scrollController,
               itemBuilder: (context, index) {
                 String time = widget.reservedAvailList[index];
+
                 return Center(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 25),
@@ -116,9 +111,7 @@ class _ReservationAvailListViewState extends State<ReservationAvailListView>
             padding: const EdgeInsets.only(top: 10.0),
             child: IconButton(
               onPressed: () {
-                isTop
-                    ? scrollToEnd(_scrollController)
-                    : scrollToStart(_scrollController);
+                isTop ? scrollToEnd() : scrollToStart();
               },
               icon: isTop
                   ? const Icon(Icons.arrow_drop_down_circle)

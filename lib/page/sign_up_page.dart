@@ -25,7 +25,6 @@ class _LoginPageState extends State<SignUpPage> {
   String emailData = "not yet";
   Color emailAuthCodeColor = Colors.black;
   Color emailColor = Colors.black;
-  // String baseUrl = "http://localhost:8080";
 
   @override
   Widget build(BuildContext context) {

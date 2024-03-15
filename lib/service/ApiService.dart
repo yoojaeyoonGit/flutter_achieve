@@ -80,8 +80,6 @@ class ApiService {
       for (var time in reservedTimes) {
         reservedList.add(ReservedTimeModel.fromJson(time));
       }
-      // print('흠 ${cursor}');흠
-
       return reservedList;
     }
     throw Error();

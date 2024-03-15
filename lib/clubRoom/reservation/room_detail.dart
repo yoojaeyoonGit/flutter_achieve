@@ -40,10 +40,10 @@ class _RoomDetailState extends State<RoomDetail> {
       selectedFullDate =
           DateTime(now.year, now.month, now.day, now.hour + 1, 0, 1);
 
-      selectedDateAtTime = DateTime(now.year, now.month, now.day, now.hour + 1, 0, 1);
+      selectedDateAtTime =
+          DateTime(now.year, now.month, now.day, now.hour + 1, 0, 1);
     } else {
-      selectedFullDate =
-          DateTime(now.year, now.month, now.day, now.hour, 0, 1);
+      selectedFullDate = DateTime(now.year, now.month, now.day, now.hour, 0, 1);
 
       selectedDateAtTime =
           DateTime(now.year, now.month, now.day, now.hour, 0, 1);
@@ -117,6 +117,7 @@ class _RoomDetailState extends State<RoomDetail> {
             child: Hero(
               tag: widget.id,
               child: ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: images.length,
                   // padding: const EdgeInsets.only(bottom: 300),
@@ -138,8 +139,8 @@ class _RoomDetailState extends State<RoomDetail> {
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.start,
+                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
                     width: width * 2,
@@ -150,63 +151,81 @@ class _RoomDetailState extends State<RoomDetail> {
                       ],
                     ),
                   ),
-                  Text(
-                    "예약 시간 (선택)",
-                    style: TextStyle(
-                      fontSize: textSize,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 13.0),
-                        child: Icon(
-                          Icons.access_time_outlined,
-                          size: textSize,
+                  Padding(
+                    padding: EdgeInsets.only(left: width * 0.05),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "예약 시간 (선택)",
+                          style: TextStyle(
+                            fontSize: textSize,
+                          ),
                         ),
-                      ),
-                      yearSelectButton(context, textSize),
-                      timeSelectedButton(textSize),
-                    ],
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 13.0),
+                              child: Icon(
+                                Icons.access_time_outlined,
+                                size: textSize,
+                              ),
+                            ),
+                            yearSelectButton(context, textSize),
+                            timeSelectedButton(textSize),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: height / 30,
                   ),
-                  Text(
-                    "예약 종료 시간",
-                    style: TextStyle(
-                      fontSize: textSize,
-                    ),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 9),
-                    child: Row(
+                    padding: EdgeInsets.only(left: width * 0.05),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10.0, top: 15),
-                          child: Icon(
-                            Icons.timer_off_outlined,
-                            size: textSize,
+                        Text(
+                          "예약 종료 시간",
+                          style: TextStyle(
+                            fontSize: textSize,
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: width / 20, top: 15),
-                          child: Text(
-                            endYearFormat(selectedFullDate, endTime),
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                                fontSize: textSize),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Text(
-                            endTimeFormatter(selectedFullDate, endTime),
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                                fontSize: textSize),
+                          padding: const EdgeInsets.only(bottom: 9),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 10.0, top: 15),
+                                child: Icon(
+                                  Icons.timer_off_outlined,
+                                  size: textSize,
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(right: width / 20, top: 15),
+                                child: Text(
+                                  endYearFormat(selectedFullDate, endTime),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: textSize),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 15),
+                                child: Text(
+                                  endTimeFormatter(selectedFullDate, endTime),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: textSize),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -247,9 +266,8 @@ class _RoomDetailState extends State<RoomDetail> {
                               child: TextButton(
                                 onPressed: () {
                                   print(selectedFullDate);
-                                  print("${selectedFullDate.add(
-                                      const Duration(hours: 1)).subtract(
-                                      const Duration(seconds: 1))}");
+                                  print(
+                                      "${selectedFullDate.add(const Duration(hours: 1)).subtract(const Duration(seconds: 1))}");
                                   ApiService.makeReservation(
                                       widget.id,
                                       selectedFullDate,

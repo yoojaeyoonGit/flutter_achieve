@@ -25,26 +25,14 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
   List<String> secondDayReservedAvailList = [];
   bool _isLoading = false;
   late ScrollController _scrollController;
-  final ScrollController _scrollControllerForTimeFirst = ScrollController();
-  final ScrollController _scrollControllerForTimeSecond = ScrollController();
+  DateTime availListDate = DateTime.now();
   bool isTop = true;
   int cursorDateNum = 0;
 
   @override
   initState() {
     super.initState();
-    _settingReservedMap(DateTime.now().toString());
-    _scrollController = ScrollController()
-      ..addListener(() {
-        print(isTop);
-        setState(() {
-          if (_scrollController.offset > 0) {
-            isTop = false;
-          } else {
-            isTop = true;
-          }
-        });
-      });
+    _scrollController = ScrollController();
   }
 
   void scrollToEnd(ScrollController scrollController) {
@@ -94,7 +82,6 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
       setState(() {
         _isLoading = false;
       });
-
       if (fetchedReservedTimes.length > 1) {
         for (var time in fetchedReservedTimes) {
           DateTime parsedTime = DateTime.parse(time.reservationStartTime);
@@ -108,20 +95,27 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
         String? firstKey = reservationAvailTimeMap.keys.first;
         dynamic? firstValue = reservationAvailTimeMap[firstKey];
         int firstDay = firstValue.day;
+
         for (var time in reservationAvailTimeMap.entries) {
           DateTime parsedTime = time.value;
 
-          if (parsedTime.day == firstDay) {
-            firstDayReservedAvailList.add(changeDurationForm(parsedTime.hour));
-          } else {
-            secondDayReservedAvailList.add(changeDurationForm(parsedTime.hour));
-          }
+          setState(() {
+            if (parsedTime.day == firstDay) {
+              firstDayReservedAvailList
+                  .add(changeDurationForm(parsedTime.hour));
+            } else {
+              secondDayReservedAvailList
+                  .add(changeDurationForm(parsedTime.hour));
+            }
+          });
         }
       } else {
-        for (int i = 0; i < 24; i++) {
-          firstDayReservedAvailList.add(changeDurationForm(i));
-          secondDayReservedAvailList.add(changeDurationForm(i));
-        }
+        setState(() {
+          for (int i = 0; i < 24; i++) {
+            firstDayReservedAvailList.add(changeDurationForm(i));
+            secondDayReservedAvailList.add(changeDurationForm(i));
+          }
+        });
       }
     } catch (error) {
       print("Error fetching reserved times: $error");
@@ -166,58 +160,63 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                           child: AlertDialog(
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 5),
-                            content: SizedBox(
-                              width: width * 0.9,
-                              height: height * 0.85,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: ListView.builder(
-                                      controller: _scrollController,
-                                      itemBuilder: (context, index) {
-                                        return Center(
-                                            child:
-                                                reserveInformationList[index]);
-                                      },
-                                      itemCount: reserveInformationList.length,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: IconButton(
-                                      onPressed: () {
-                                        isTop
-                                            ? scrollToEnd(_scrollController)
-                                            : scrollToStart(_scrollController);
-                                      },
-                                      icon: isTop
-                                          ? const Icon(
-                                              Icons.arrow_drop_down_circle)
-                                          : const Icon(
-                                              Icons.arrow_drop_up_outlined),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 20.0),
-                                    child: TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        setState(() {
-                                          isTop = true;
-                                        });
-                                      },
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: Colors.black,
+                            content: StatefulBuilder(builder:
+                                (BuildContext context, StateSetter setState) {
+                              return SizedBox(
+                                width: width * 0.9,
+                                height: height * 0.85,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: ListView.builder(
+                                        controller: _scrollController,
+                                        itemBuilder: (context, index) {
+                                          return Center(
+                                              child: reserveInformationList[
+                                                  index]);
+                                        },
+                                        itemCount:
+                                            reserveInformationList.length,
                                       ),
-                                      child: const Text("확인",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600)),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: IconButton(
+                                        onPressed: () {
+                                          isTop
+                                              ? scrollToEnd(_scrollController)
+                                              : scrollToStart(
+                                                  _scrollController);
+                                        },
+                                        icon: isTop
+                                            ? const Icon(
+                                                Icons.arrow_drop_down_circle)
+                                            : const Icon(
+                                                Icons.arrow_drop_up_outlined),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 20.0),
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          setState(() {
+                                            isTop = true;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                        ),
+                                        child: const Text("확인",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
                             insetPadding:
                                 const EdgeInsets.fromLTRB(0, 10, 0, 10),
                           ),
@@ -258,9 +257,10 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                         cursorDateNum, DateTime.now().toIso8601String());
                     showDialog(
                       barrierDismissible: true,
-                      builder: (BuildContext context) {
+                      builder: (context) {
                         return WillPopScope(
                           onWillPop: () async {
+                            availListDate = DateTime.now();
                             cursorDateNum = 0;
                             reservationAvailTimeMap.clear();
                             firstDayReservedAvailList.clear();
@@ -273,91 +273,152 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                             content: _isLoading
                                 ? const Center(
                                     child: CircularProgressIndicator())
-                                : SizedBox(
-                                    width: width * 0.9,
-                                    height: height * 0.85,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "${DateTime.now().year}년",
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                        Expanded(
-                                          child: Row(
-                                            children: [
-                                              IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                      Icons.chevron_left)),
-                                              ReservationAvailListView(
-                                                  reservedAvailList:
-                                                      firstDayReservedAvailList,
-                                                  month: DateTime.now().month,
-                                                  day: DateTime.now().day,
-                                                  scrollController:
-                                                      _scrollControllerForTimeFirst),
-                                              ReservationAvailListView(
-                                                  reservedAvailList:
-                                                      secondDayReservedAvailList,
-                                                  month: DateTime.now().month,
-                                                  day: DateTime.now()
-                                                      .add(const Duration(
-                                                          days: 1))
-                                                      .day,
-                                                  scrollController:
-                                                      _scrollControllerForTimeSecond),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    cursorDateNum += 1;
-                                                    firstDayReservedAvailList
-                                                        .clear();
-                                                    secondDayReservedAvailList
-                                                        .clear();
-                                                    _settingReservedMap(
-                                                        cursorDateTimeMaker(
-                                                            DateTime.now()));
-                                                    _fetchReservedListFromApi(
-                                                        cursorDateNum,
-                                                        cursorDateTimeMaker(
-                                                            DateTime.now()));
-                                                      setState(() {
-                                                        scrollToStart(
-                                                            _scrollControllerForTimeFirst);
-                                                        scrollToStart(
-                                                            _scrollControllerForTimeSecond);
-                                                      });
-                                                    // }
+                                : StatefulBuilder(builder:
+                                    (BuildContext context,
+                                        StateSetter setState) {
+                                    return SizedBox(
+                                      width: width * 0.9,
+                                      height: height * 0.85,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "${availListDate.year}년",
+                                            style:
+                                                const TextStyle(fontSize: 20),
+                                          ),
+                                          Expanded(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                IconButton(
+                                                    onPressed: () {},
+                                                    icon: const Icon(
+                                                        Icons.chevron_left)),
+                                                const Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 15.0),
+                                                ),
+                                                FutureBuilder<
+                                                    List<ReservedTimeModel>>(
+                                                  future: reservedListFromApi,
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return availDataLoadingCircle();
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Center(
+                                                          child: Text(
+                                                              'Error: ${snapshot.error}'));
+                                                    } else {
+                                                      if (firstDayReservedAvailList
+                                                          .isNotEmpty) {
+                                                        return ReservationAvailListView(
+                                                          reservedAvailList:
+                                                              firstDayReservedAvailList,
+                                                          cursorDateNum:
+                                                              cursorDateNum,
+                                                        );
+                                                      } else {
+                                                        return const CircularProgressIndicator();
+                                                      }
+                                                    }
                                                   },
-                                                  icon: const Icon(
-                                                      Icons.chevron_right)),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 20.0),
-                                          child: TextButton(
-                                            onPressed: () {
-                                              reservationAvailTimeMap.clear();
-                                              firstDayReservedAvailList.clear();
-                                              secondDayReservedAvailList
-                                                  .clear();
-                                              cursorDateNum = 0;
-                                              Navigator.of(context).pop();
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: Colors.black,
+                                                ),
+                                                const Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 15.0),
+                                                ),
+                                                FutureBuilder<
+                                                    List<ReservedTimeModel>>(
+                                                  future: reservedListFromApi,
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return availDataLoadingCircle();
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Center(
+                                                          child: Text(
+                                                              'Error: ${snapshot.error}'));
+                                                    } else {
+                                                      if (firstDayReservedAvailList
+                                                          .isNotEmpty) {
+                                                        return ReservationAvailListView(
+                                                          reservedAvailList:
+                                                              secondDayReservedAvailList,
+                                                          cursorDateNum:
+                                                              cursorDateNum + 1,
+                                                        );
+                                                      } else {
+                                                        return const CircularProgressIndicator();
+                                                      }
+                                                    }
+                                                  },
+                                                ),
+                                                IconButton(
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        availListDate = DateTime
+                                                                .now()
+                                                            .add(Duration(
+                                                                days:
+                                                                    cursorDateNum +
+                                                                        1));
+                                                      });
+                                                      cursorDateNum += 2;
+
+                                                      firstDayReservedAvailList
+                                                          .clear();
+                                                      secondDayReservedAvailList
+                                                          .clear();
+                                                      _settingReservedMap(
+                                                          cursorDateTimeMaker(
+                                                              DateTime.now()));
+
+                                                      await _fetchReservedListFromApi(
+                                                          cursorDateNum,
+                                                          cursorDateTimeMaker(
+                                                              DateTime.now()));
+                                                    },
+                                                    icon: const Icon(
+                                                        Icons.chevron_right)),
+                                              ],
                                             ),
-                                            child: const Text("확인",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 20.0),
+                                            child: TextButton(
+                                              onPressed: () {
+                                                availListDate = DateTime.now();
+                                                reservationAvailTimeMap.clear();
+                                                firstDayReservedAvailList
+                                                    .clear();
+                                                secondDayReservedAvailList
+                                                    .clear();
+                                                cursorDateNum = 0;
+                                                Navigator.of(context).pop();
+                                              },
+                                              style: TextButton.styleFrom(
+                                                backgroundColor: Colors.black,
+                                              ),
+                                              child: const Text("확인",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }),
                             insetPadding:
                                 const EdgeInsets.fromLTRB(0, 30, 0, 30),
                           ),
@@ -438,4 +499,19 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
     }
     return '$amPmFormat $hour:00';
   }
+
+  Expanded availDataLoadingCircle() {
+    return const Expanded (
+        child: SizedBox(width: double.infinity,
+            child: Center(
+              child:
+              CircularProgressIndicator(
+                strokeWidth: 2,
+                // color: Colors.white,
+              )
+              ,
+            )
+        ));
+  }
+
 }
