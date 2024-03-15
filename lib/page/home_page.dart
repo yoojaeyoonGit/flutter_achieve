@@ -1,3 +1,4 @@
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:m2/main.dart';
@@ -13,8 +14,43 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final PageController controller = PageController(initialPage: 0);
+  final PageController pageController = PageController(initialPage: 0);
   int currentPage = 0;
+  int pageCount = 12;
+  late Timer timer;
+  @override
+  void initState() {
+    super.initState();
+
+    timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+      if (currentPage < pageCount - 1) {
+        currentPage++;
+      } else {
+        currentPage = 0;
+      }
+
+      if (currentPage == 0) {
+        pageController.animateToPage(
+          currentPage,
+          duration: const Duration(milliseconds: 1),
+          curve: Curves.easeIn,
+        );
+      } else {
+        pageController.animateToPage(
+          currentPage,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeIn,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +74,7 @@ class _HomePageState extends State<HomePage> {
     double width = MediaQuery.of(context).size.width / 2.6;
 
     List<Padding> pages =
-    List.generate(12, (index) => listItem(fontSize, width2, height));
+        List.generate(pageCount, (index) => listItem(fontSize, width2, height));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -77,7 +113,6 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                             builder: (context) => const ReservationPage()),
                       );
-
                     },
                     child: BasicFunction(
                       height: height,
@@ -115,16 +150,17 @@ class _HomePageState extends State<HomePage> {
 
   PageView pageViewList(double width, List<Padding> pages) {
     return PageView.builder(
-        controller: controller,
-        itemCount: pages.length,
-        onPageChanged: (page) {
-          setState(() {
-            currentPage = page;
-          });
-        },
-        itemBuilder: (context, index) {
-          return pages[index];
-        });
+      controller: pageController,
+      itemCount: pages.length,
+      onPageChanged: (page) {
+        // setState(() {
+        //   currentPage = page;
+        // });
+      },
+      itemBuilder: (context, index) {
+        return pages[index];
+      },
+    );
   }
 
   Padding listItem(double fontSize, double width, double height) {

@@ -1,4 +1,5 @@
 // import 'package:flutter/cupertino.dart';
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -26,11 +27,46 @@ class _RoomDetailState extends State<RoomDetail> {
   late DateTime endTime = DateTime.now();
   DateTime selectedFullDate = DateTime.now();
   String durationForm = "";
+  int pageCount = 3;
+  int currentPage = 0;
+  late Timer timer;
+  final PageController pageController = PageController(initialPage: 0);
 
   @override
   void initState() {
     super.initState();
     _initializeDates();
+
+    timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+      if (currentPage < pageCount - 1) {
+        currentPage++;
+      } else {
+        currentPage = 0;
+      }
+
+      if (currentPage < pageCount) {
+        pageController.animateToPage(
+          currentPage,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeIn,
+        );
+      }
+
+      if (currentPage == 0) {
+        pageController.animateToPage(
+          currentPage,
+          duration: const Duration(milliseconds: 1),
+          curve: Curves.easeIn,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    timer.cancel();
+    super.dispose();
   }
 
   void _initializeDates() {
@@ -63,11 +99,14 @@ class _RoomDetailState extends State<RoomDetail> {
           borderRadius: BorderRadius.circular(15),
         ),
         width: width / 1.4,
-        child: Image.network(
-            "https://yt3.googleusercontent.com/ytc/AIf8zZR8VBlMDZi6X85aGN_jcLIojmXoqPG1vrx93Nmj6w=s900-c-k-c0x00ffffff-no-rj",
-            width: width,
-            // width / 2,
-            fit: BoxFit.cover),
+        child: Stack(
+          children: [
+            Image.network(
+                "https://yt3.googleusercontent.com/ytc/AIf8zZR8VBlMDZi6X85aGN_jcLIojmXoqPG1vrx93Nmj6w=s900-c-k-c0x00ffffff-no-rj",
+                width: width,
+                fit: BoxFit.cover),
+          ],
+        ),
       ),
       Container(
         clipBehavior: Clip.hardEdge,
@@ -116,21 +155,21 @@ class _RoomDetailState extends State<RoomDetail> {
           Expanded(
             child: Hero(
               tag: widget.id,
-              child: ListView.separated(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: images.length,
-                  // padding: const EdgeInsets.only(bottom: 300),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, bottom: 40, left: 10, right: 10),
-                      child: images[index],
-                    );
-                  },
-                  separatorBuilder: (context, index) => const SizedBox(
-                        width: 20,
-                      )),
+              child: PageView.builder(
+                controller: pageController,
+                pageSnapping: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: images.length,
+                onPageChanged: (value) {},
+                // padding: const EdgeInsets.only(bottom: 300),
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                        top: 20, bottom: 40, left: 10, right: 10),
+                    child: images[index],
+                  );
+                },
+              ),
             ),
           ),
           SizedBox(
@@ -139,8 +178,6 @@ class _RoomDetailState extends State<RoomDetail> {
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.start,
-                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
                     width: width * 2,
