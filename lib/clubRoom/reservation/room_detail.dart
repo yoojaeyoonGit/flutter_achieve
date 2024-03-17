@@ -36,30 +36,7 @@ class _RoomDetailState extends State<RoomDetail> {
   void initState() {
     super.initState();
     _initializeDates();
-
-    timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      if (currentPage < pageCount - 1) {
-        currentPage++;
-      } else {
-        currentPage = 0;
-      }
-
-      if (currentPage < pageCount) {
-        pageController.animateToPage(
-          currentPage,
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeIn,
-        );
-      }
-
-      if (currentPage == 0) {
-        pageController.animateToPage(
-          currentPage,
-          duration: const Duration(milliseconds: 1),
-          curve: Curves.easeIn,
-        );
-      }
-    });
+    bannerTimer();
   }
 
   @override
@@ -93,47 +70,21 @@ class _RoomDetailState extends State<RoomDetail> {
     double textSize = width * 0.05;
 
     List<Container> images = [
-      Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        width: width / 1.4,
-        child: Stack(
-          children: [
-            Image.network(
-                "https://yt3.googleusercontent.com/ytc/AIf8zZR8VBlMDZi6X85aGN_jcLIojmXoqPG1vrx93Nmj6w=s900-c-k-c0x00ffffff-no-rj",
-                width: width,
-                fit: BoxFit.cover),
-          ],
-        ),
-      ),
-      Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        width: width / 1.4,
-        child: Image.network(
-            "https://static01.nyt.com/images/2019/05/31/us/31applehq-01alt/31applehq-01alt-superJumbo.jpg?quality=75&auto=webp",
-            height: width / 2,
-            width: width,
-            // 10,
-            fit: BoxFit.cover),
-      ),
-      Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        width: width / 1.4,
-        child: Image.network(
-            "https://blog.spoongraphics.co.uk/wp-content/uploads/2009/apple-wallpaper/Picture-5.jpg",
-            height: width / 2,
-            width: width,
-            // width: 10,
-            fit: BoxFit.cover),
-      ),
+      roomBannerImage(
+          1,
+          "https://yt3.googleusercontent.com/ytc/AIf8zZR8VBlMDZi6X85aGN_jcLIojmXoqPG1vrx93Nmj6w=s900-c-k-c0x00ffffff-no-rj",
+          width,
+          height),
+      roomBannerImage(
+          2,
+          "https://static01.nyt.com/images/2019/05/31/us/31applehq-01alt/31applehq-01alt-superJumbo.jpg?quality=75&auto=webp",
+          width,
+          height),
+      roomBannerImage(
+          3,
+          "https://blog.spoongraphics.co.uk/wp-content/uploads/2009/apple-wallpaper/Picture-5.jpg",
+          width,
+          height)
     ];
 
     return Scaffold(
@@ -508,6 +459,65 @@ class _RoomDetailState extends State<RoomDetail> {
           color: Colors.black,
           fontSize: textSize,
         ),
+      ),
+    );
+  }
+
+  void bannerTimer() {
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      if (currentPage < pageCount - 1) {
+        setState(() {
+          currentPage++;
+        });
+      } else {
+        setState(() {
+          currentPage = 0;
+        });
+      }
+
+      if (currentPage == 0) {
+        pageController.animateToPage(
+          currentPage,
+          duration: const Duration(milliseconds: 1),
+          curve: Curves.easeIn,
+        );
+      } else {
+        pageController.animateToPage(
+          currentPage,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeIn,
+        );
+      }
+    });
+  }
+
+  Container roomBannerImage(int currentPage, String imageUrl, double width, double height) {
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      width: width / 1.4,
+      child: Stack(
+        children: [
+          Image.network(imageUrl,
+              height: width / 2, width: width, fit: BoxFit.cover),
+          Positioned(
+            left: width * 0.79,
+            bottom: height * 0.01,
+            child: SizedBox(
+              width: width * 0.13,
+              child: Material(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Center(
+                    child: Text(
+                      "$currentPage / $pageCount",
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  )),
+            ),
+          ),
+        ],
       ),
     );
   }

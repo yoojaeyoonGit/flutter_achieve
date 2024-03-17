@@ -47,7 +47,7 @@ class _RoomState extends State<Room> {
                   border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                height: height * 0.25,
+                height: height * 0.2,
                 // width: width / 1,
                 child: Padding(
                   padding: const EdgeInsets.all(1.3),

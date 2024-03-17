@@ -18,31 +18,12 @@ class _HomePageState extends State<HomePage> {
   int currentPage = 0;
   int pageCount = 12;
   late Timer timer;
+
   @override
   void initState() {
     super.initState();
 
-    timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      if (currentPage < pageCount - 1) {
-        currentPage++;
-      } else {
-        currentPage = 0;
-      }
-
-      if (currentPage == 0) {
-        pageController.animateToPage(
-          currentPage,
-          duration: const Duration(milliseconds: 1),
-          curve: Curves.easeIn,
-        );
-      } else {
-        pageController.animateToPage(
-          currentPage,
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeIn,
-        );
-      }
-    });
+    bannerTimer();
   }
 
   @override
@@ -74,7 +55,7 @@ class _HomePageState extends State<HomePage> {
     double width = MediaQuery.of(context).size.width / 2.6;
 
     List<Padding> pages =
-        List.generate(pageCount, (index) => listItem(fontSize, width2, height));
+        List.generate(pageCount, (index) => listItem(fontSize, width2, height, currentPage, pageCount));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -92,8 +73,8 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(top: height / 3),
-                child: pageViewList(width, pages),
+                padding: const EdgeInsets.only(top: 3, bottom: 5),
+                child: pageViewList(width,  pages),
               ),
             ),
             SizedBox(
@@ -108,11 +89,14 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      timer.cancel();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const ReservationPage()),
-                      );
+                      ).then((_) => {
+                        bannerTimer(),
+                      });
                     },
                     child: BasicFunction(
                       height: height,
@@ -163,7 +147,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Padding listItem(double fontSize, double width, double height) {
+  Padding listItem(double fontSize, double width, double height, currentPage, pageLength) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Container(
@@ -173,46 +157,100 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.circular(10),
           color: Colors.black,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 25.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                      height: 20,
-                      width: 70,
-                      child: const Center(
-                        child: Text(
-                          "Achieve",
-                          style: TextStyle(color: Colors.black),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 25.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                          height: 20,
+                          width: 70,
+                          child: const Center(
+                            child: Text(
+                              "Achieve",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      Text(
+                        "테커 동아리방 예약 시스템 \n예약과 취소를 간편하게!",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                          fontSize: fontSize,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    "테커 동아리방 예약 시스템 \n예약과 취소를 간편하게!",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      fontSize: fontSize,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: width * 0.02, bottom: height * 0.15),
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      width: width * 0.13,
+                      child: Center(
+                        child: Text(
+                          "${currentPage + 1} / $pageLength",
+                          // style: TextStyle(color: Colors.white),
+                        ),
+                      )),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void bannerTimer() {
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      if (currentPage < pageCount - 1) {
+        setState(() {
+          currentPage++;
+        });
+      } else {
+        setState(() {
+          currentPage = 0;
+        });
+      }
+
+      if (currentPage == 0) {
+        pageController.animateToPage(
+          currentPage,
+          duration: const Duration(milliseconds: 1),
+          curve: Curves.easeIn,
+        );
+      } else {
+        pageController.animateToPage(
+          currentPage,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeIn,
+        );
+      }
+    });
   }
 }

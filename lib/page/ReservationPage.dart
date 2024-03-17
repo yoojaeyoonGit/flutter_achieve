@@ -21,17 +21,6 @@ class _ReservationPageState extends State<ReservationPage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width / 2;
     double height = MediaQuery.of(context).size.height / 2;
-    // List<Room> rooms = [
-    //   const Room(
-    //       roomName: "Palo Alto",
-    //       description: "실리콘밸리의 탄생지(Birthplace of Silicon Valley)로 불리는 미국"
-    //           " 캘리포니아주 산타클라라 군에 속한 실리콘밸리 북부의 도시의 이름에서 따온 방입니다."),
-    //   const Room(
-    //       roomName: "Apple",
-    //       description: "애플(영어: Apple Inc.)"
-    //           "은 미국 캘리포니아의 아이폰, 아이패드, 애플 워치, 에어팟, 아이맥, 맥북, "
-    //           "맥 스튜디오와 맥 프로, 홈팟, 비전 프로, 에어태그 등의 하드웨어")
-    // ];
 
     return Scaffold(
       appBar: AppBar(
@@ -86,7 +75,18 @@ class _ReservationPageState extends State<ReservationPage> {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       itemBuilder: (context, index) {
         var room = snapshot.data![index];
-        return Room(roomName: room.roomName, description: room.description, id: room.id);
+        return Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.4), // 그림자 색상 및 투명도
+                spreadRadius: 8, // 그림자 전파 반경
+                blurRadius: 12, // 그림자 흐림 반경
+                offset: const Offset(0, 8), // 그림자 위치
+              )
+            ]
+          ),
+            child: Room(roomName: room.roomName, description: room.description, id: room.id));
       },
       separatorBuilder: (context, index) => SizedBox(
         height: height * 0.07,
