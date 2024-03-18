@@ -115,8 +115,11 @@ class _RoomDetailState extends State<RoomDetail> {
                 // padding: const EdgeInsets.only(bottom: 300),
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.only(
-                        top: 20, bottom: 40, left: 10, right: 10),
+                    padding: EdgeInsets.only(
+                        top: height * 0.02,
+                        bottom: bottomAtBannerSlide(height),
+                        left: 10,
+                        right: 10),
                     child: images[index],
                   );
                 },
@@ -452,8 +455,7 @@ class _RoomDetailState extends State<RoomDetail> {
         );
       },
       child: Text(
-        durationForm = changeDurationForm(selectedFullDate),
-        semanticsLabel: durationForm,
+        changeDurationForm(selectedFullDate),
         style: TextStyle(
           fontWeight: FontWeight.w400,
           color: Colors.black,
@@ -491,7 +493,8 @@ class _RoomDetailState extends State<RoomDetail> {
     });
   }
 
-  Container roomBannerImage(int currentPage, String imageUrl, double width, double height) {
+  Container roomBannerImage(
+      int currentPage, String imageUrl, double width, double height) {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
@@ -520,5 +523,15 @@ class _RoomDetailState extends State<RoomDetail> {
         ],
       ),
     );
+  }
+  //
+  double bottomAtBannerSlide(double height) {
+    if (height > 700) {
+      return height * 0.025;
+    }
+
+    else {
+      return height * 0.001;
+    }
   }
 }

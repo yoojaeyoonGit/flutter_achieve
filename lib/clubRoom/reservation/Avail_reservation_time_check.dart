@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -164,6 +166,7 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                 (BuildContext context, StateSetter setState) {
                               return SizedBox(
                                 width: width * 0.9,
+                                // width: width * 0.04,
                                 height: height * 0.85,
                                 child: Column(
                                   children: [
@@ -280,25 +283,54 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                       width: width * 0.9,
                                       height: height * 0.85,
                                       child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            "${availListDate.year}년",
-                                            style:
-                                                const TextStyle(fontSize: 20),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: Text(
+                                              "${availListDate.year}년",
+                                              style:
+                                                  const TextStyle(fontSize: 20),
+                                            ),
                                           ),
                                           Expanded(
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                                  MainAxisAlignment.spaceAround,
                                               children: [
                                                 IconButton(
-                                                    onPressed: () {},
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        availListDate = DateTime
+                                                                .now()
+                                                            .add(Duration(
+                                                                days:
+                                                                    cursorDateNum +
+                                                                        1));
+                                                      });
+                                                      cursorDateNum -= 2;
+
+                                                      firstDayReservedAvailList
+                                                          .clear();
+                                                      secondDayReservedAvailList
+                                                          .clear();
+                                                      _settingReservedMap(
+                                                          cursorDateTimeMaker(
+                                                              DateTime.now()));
+
+                                                      await _fetchReservedListFromApi(
+                                                          cursorDateNum,
+                                                          cursorDateTimeMaker(
+                                                              DateTime.now()));
+                                                    },
                                                     icon: const Icon(
                                                         Icons.chevron_left)),
                                                 const Padding(
                                                   padding: EdgeInsets.only(
-                                                      top: 15.0),
+                                                      right: 5.0),
                                                 ),
+
                                                 FutureBuilder<
                                                     List<ReservedTimeModel>>(
                                                   future: reservedListFromApi,
@@ -313,7 +345,7 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                                       return Center(
                                                           child: Text(
                                                               'Error: ${snapshot.error}'));
-                                                    } else {
+                                                    } else { 
                                                       if (firstDayReservedAvailList
                                                           .isNotEmpty) {
                                                         return ReservationAvailListView(
@@ -327,10 +359,6 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                                       }
                                                     }
                                                   },
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: 15.0),
                                                 ),
                                                 FutureBuilder<
                                                     List<ReservedTimeModel>>(
@@ -361,6 +389,10 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                                     }
                                                   },
                                                 ),
+                                                // const Padding(
+                                                //   padding: EdgeInsets.only(
+                                                //       right: 50.0),
+                                                // ),
                                                 IconButton(
                                                     onPressed: () async {
                                                       setState(() {
@@ -393,7 +425,7 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                top: 20.0),
+                                                top: 20.0, left: 5),
                                             child: TextButton(
                                               onPressed: () {
                                                 availListDate = DateTime.now();
@@ -501,17 +533,14 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
   }
 
   Expanded availDataLoadingCircle() {
-    return const Expanded (
-        child: SizedBox(width: double.infinity,
+    return const Expanded(
+        child: SizedBox(
+            width: double.infinity,
             child: Center(
-              child:
-              CircularProgressIndicator(
+              child: CircularProgressIndicator(
                 strokeWidth: 2,
                 // color: Colors.white,
-              )
-              ,
-            )
-        ));
+              ),
+            )));
   }
-
 }
