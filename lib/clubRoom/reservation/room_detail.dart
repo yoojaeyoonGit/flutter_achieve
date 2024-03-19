@@ -527,7 +527,7 @@ class _RoomDetailState extends State<RoomDetail> {
   //
   double bottomAtBannerSlide(double height) {
     if (height > 700) {
-      return height * 0.025;
+      return height * 0.04;
     }
 
     else {

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:m2/main.dart';
-import 'package:m2/page/NoticeBoardPage.dart';
-import 'package:m2/page/ReservationPage.dart';
+import 'package:m2/page/notice_board_page.dart';
+import 'package:m2/page/reservation_page.dart';
 import 'package:m2/widget/basicFuntionbutton.dart';
 
 class HomePage extends StatefulWidget {
@@ -109,11 +109,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      timer.cancel();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const NoticeBoardPage()),
-                      );
+                      ).then((_) => {
+                        bannerTimer(),
+                      });
                     },
                     child: BasicFunction(
                         height: height,

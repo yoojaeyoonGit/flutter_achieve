@@ -76,8 +76,6 @@ class _SignUpPageState extends State<LoginPage> {
                           final accessToken = response.headers["authorization"];
                           final refreshToken =
                               response.headers["refresh-token"];
-                          print('accessToken 값: $accessToken');
-                          print('refreshToken 값: $refreshToken');
                           setState(() {
                             if (accessToken != null && refreshToken != null) {
                               secureStorage.saveAccessToken(accessToken);

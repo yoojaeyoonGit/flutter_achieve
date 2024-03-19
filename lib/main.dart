@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:m2/log_in_status.dart';
-import 'package:m2/page/Auth_page.dart';
+import 'package:m2/page/auth_page.dart';
 import 'package:m2/page/home_page.dart';
 import 'package:m2/secure_storage.dart';
 import 'package:provider/provider.dart';

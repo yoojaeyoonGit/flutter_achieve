@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:m2/clubRoom/reservation/room.dart';
 import 'package:m2/models/room_model.dart';
@@ -6,10 +5,6 @@ import 'package:m2/service/ApiService.dart';
 
 class ReservationPage extends StatefulWidget {
   const ReservationPage({super.key});
-
-  // final Future<List<RoomModel>> =
-  // final Future<List<Room>>
-  // Future<List<RoomModel>>
 
   @override
   State<ReservationPage> createState() => _ReservationPageState();
