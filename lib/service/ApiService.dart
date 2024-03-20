@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:m2/models/Reserved_time_model.dart';
+import 'package:m2/models/comment_model.dart';
 import 'package:m2/models/room_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:m2/secure_storage.dart';
@@ -64,8 +65,10 @@ class ApiService {
       print("reservation finished");
     } else {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      print("Business code: ${ErrorRequestModel.fromJson(jsonData).businessCode}");
-      print("Error message: ${ErrorRequestModel.fromJson(jsonData).errorMessage}");
+      print(
+          "Business code: ${ErrorRequestModel.fromJson(jsonData).businessCode}");
+      print(
+          "Error message: ${ErrorRequestModel.fromJson(jsonData).errorMessage}");
       throw Error();
     }
   }
@@ -94,7 +97,8 @@ class ApiService {
     throw Error();
   }
 
-  static Future<List<BoardModel>> getBoards(String cursor, String category) async {
+  static Future<List<BoardModel>> getBoards(
+      String category, String cursor) async {
     final AuthStorage authStorage = AuthStorage();
 
     final url =
@@ -108,14 +112,13 @@ class ApiService {
       Map<String, dynamic> parsedPosts =
           jsonDecode(utf8.decode(response.bodyBytes));
 
-      List<BoardModel> boardsModels =  parseBoardModelList(parsedPosts);
-
-      return boardsModels;
-    }
-    else {
+      return receivedBoardModels(parsedPosts);
+    } else {
       final errorJsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      print("Business code: ${ErrorRequestModel.fromJson(errorJsonData).businessCode}");
-      print("Error message: ${ErrorRequestModel.fromJson(errorJsonData).errorMessage}");
+      print(
+          "Business code: ${ErrorRequestModel.fromJson(errorJsonData).businessCode}");
+      print(
+          "Error message: ${ErrorRequestModel.fromJson(errorJsonData).errorMessage}");
     }
     throw Error();
   }
@@ -123,27 +126,48 @@ class ApiService {
   static Future<BoardModel> getOneBoard(int id) async {
     final AuthStorage authStorage = AuthStorage();
 
-    final url =
-    Uri.parse("$baseUrl/api/boards/$id");
+    final url = Uri.parse("$baseUrl/api/boards/$id");
     String? accessToken = await authStorage.readAccessToken();
 
     final response =
-    await http.get(url, headers: {"Authorization": '$accessToken'});
+        await http.get(url, headers: {"Authorization": '$accessToken'});
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> parsedPost =
-      jsonDecode(utf8.decode(response.bodyBytes));
+      Map<String, dynamic> receivedBoard =
+          jsonDecode(utf8.decode(response.bodyBytes));
 
-      BoardModel boardsModel =  BoardModel.fromJson(parsedPost);
-
-      print(boardsModel.title);
-
-      return boardsModel;
-    }
-    else {
+      return BoardModel.fromJson(receivedBoard);
+    } else {
       final errorJsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      print("Business code: ${ErrorRequestModel.fromJson(errorJsonData).businessCode}");
-      print("Error message: ${ErrorRequestModel.fromJson(errorJsonData).errorMessage}");
+      print(
+          "Business code: ${ErrorRequestModel.fromJson(errorJsonData).businessCode}");
+      print(
+          "Error message: ${ErrorRequestModel.fromJson(errorJsonData).errorMessage}");
+    }
+    throw Error();
+  }
+
+  static Future<List<CommentModel>> getCommentsByBoardId(
+      int boardId, String cursor) async {
+    final AuthStorage authStorage = AuthStorage();
+
+    final url =
+        Uri.parse("$baseUrl/api/comments/boards/$boardId?&cursor=$cursor");
+    String? accessToken = await authStorage.readAccessToken();
+
+    final response =
+        await http.get(url, headers: {"Authorization": '$accessToken'});
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> receivedComments =
+          jsonDecode(utf8.decode(response.bodyBytes));
+      return receivedCommentModels(receivedComments);
+    } else {
+      final errorJsonData = jsonDecode(utf8.decode(response.bodyBytes));
+      print(
+          "Business code: ${ErrorRequestModel.fromJson(errorJsonData).businessCode}");
+      print(
+          "Error message: ${ErrorRequestModel.fromJson(errorJsonData).errorMessage}");
     }
     throw Error();
   }

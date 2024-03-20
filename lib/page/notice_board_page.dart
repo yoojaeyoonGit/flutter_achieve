@@ -15,14 +15,14 @@ class NoticeBoardPage extends StatefulWidget {
 
 class _NoticeBoardPageState extends State<NoticeBoardPage> {
   Future<List<BoardModel>> noticeBoards =
-      ApiService.getBoards("20", (Category.notice.name.toUpperCase()));
+      ApiService.getBoards((Category.notice.name.toUpperCase()), "20");
   bool isTapped = false;
   int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    // double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -142,7 +142,6 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
                     builder: (context) =>
                         NoticeBoardDetailPage(id: boardModel.id)))
             .then((value) => setState(() {
-                  print(boardModel.title);
                   isTapped = false;
                 }));
       },

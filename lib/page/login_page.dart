@@ -125,6 +125,7 @@ class _SignUpPageState extends State<LoginPage> {
             width: width * 0.6,
             height: height * 0.075,
             child: TextField(
+              cursorColor: Colors.black,
               style: const TextStyle(fontSize: 16),
               controller: _controller,
               decoration: InputDecoration(

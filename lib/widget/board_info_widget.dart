@@ -70,11 +70,11 @@ class BoardInfo extends StatelessWidget {
       return "$hourAfterCreate시간 전";
 
     } else {
-      if (DateTime.parse(createdAt).month < 10) {
-        month = "${DateTime.parse(createdAt).month}월 ";
-      }
+        month = "0${DateTime.parse(createdAt).month}월 ";
 
       if (DateTime.parse(createdAt).day < 10) {
+        day = "0${DateTime.parse(createdAt).day}일";
+      } else {
         day = "${DateTime.parse(createdAt).day}일";
       }
     }
@@ -101,9 +101,9 @@ class BoardInfo extends StatelessWidget {
     }
 
     if (height > 700 && height < 1000) {
-      return width * 0.18;
+      return width * 0.19;
     }
 
-    return width * 0.2;
+    return width * 0.22;
   }
 }

@@ -11,7 +11,7 @@ class BoardModel {
         createdAt = json["createdAt"];
 }
 
-List<BoardModel> parseBoardModelList(Map<String, dynamic> json) {
+List<BoardModel> receivedBoardModels(Map<String, dynamic> json) {
   final List<dynamic> values = json['values'];
   return values.map((value) => BoardModel.fromJson(value)).toList();
 }
