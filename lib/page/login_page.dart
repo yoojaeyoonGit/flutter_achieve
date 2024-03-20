@@ -29,7 +29,7 @@ class _SignUpPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        toolbarHeight: 80,
+        toolbarHeight: 60,
         title: const Text(
           "로그인",
           style: TextStyle(

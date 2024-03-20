@@ -90,7 +90,7 @@ class _RoomDetailState extends State<RoomDetail> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        toolbarHeight: 80,
+        toolbarHeight: 60,
         leading: const BackButton(
           color: Colors.white,
         ),
@@ -111,12 +111,14 @@ class _RoomDetailState extends State<RoomDetail> {
                 pageSnapping: true,
                 scrollDirection: Axis.horizontal,
                 itemCount: images.length,
-                onPageChanged: (value) {},
+                onPageChanged: (value) {
+
+                },
                 // padding: const EdgeInsets.only(bottom: 300),
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.only(
-                        top: height * 0.02,
+                        top: height > 700 ? height * 0.04 : height * 0.02,
                         bottom: bottomAtBannerSlide(height),
                         left: 10,
                         right: 10),
@@ -222,6 +224,9 @@ class _RoomDetailState extends State<RoomDetail> {
                       ],
                     ),
                   ),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
                   Container(
                     margin: const EdgeInsets.only(top: 30),
                     child: Center(
@@ -531,7 +536,7 @@ class _RoomDetailState extends State<RoomDetail> {
     }
 
     else {
-      return height * 0.001;
+      return height * 0.02;
     }
   }
 }

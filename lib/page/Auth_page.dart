@@ -37,7 +37,7 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        toolbarHeight: 80,
+        toolbarHeight: 60,
         title: const Text(
           "Achieve",
           style: TextStyle(

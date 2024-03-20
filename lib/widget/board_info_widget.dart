@@ -12,7 +12,6 @@ class BoardInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     bool isDate() {
       if (category == "date") {
         return true;
@@ -21,16 +20,10 @@ class BoardInfo extends StatelessWidget {
       return false;
     }
 
-    IconData icon = isDate() ? Icons.calendar_month_outlined : Icons
-        .calendar_month_outlined;
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    IconData icon =
+        isDate() ? Icons.calendar_month_outlined : Icons.mode_comment_outlined;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return Container(
       decoration: BoxDecoration(
@@ -38,7 +31,9 @@ class BoardInfo extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       height: 22,
-      width: isDate() ? width * 0.19 : width * 0.11,
+      width: isDate()
+          ? widthForDate(height, width)
+          : widthForMessage(height, width),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -52,8 +47,7 @@ class BoardInfo extends StatelessWidget {
             category == "date"
                 ? dateFormatter(boardModel.createdAt)
                 : boardModel.commentCount.toString(),
-            style: const TextStyle(
-                color: Colors.white, fontSize: 11),
+            style: const TextStyle(color: Colors.white, fontSize: 11),
           ),
         ],
       ),
@@ -61,31 +55,55 @@ class BoardInfo extends StatelessWidget {
   }
 
   String dateFormatter(String createdAt) {
-    if (DateTime
-        .parse(createdAt)
-        .day == DateTime
-        .now()
-        .day) {
-      if (DateTime
-          .parse(createdAt)
-          .hour < 10) {
-        return "0${DateTime
-            .parse(createdAt)
-            .hour} / ${DateTime
-            .parse(createdAt)
-            .minute}";
+    String fullFormattedDate = "";
+    String month = "";
+    String day = "";
+
+    if (DateTime.parse(createdAt).day == DateTime.now().day) {
+      int hourAfterCreate = DateTime.now().hour - DateTime.parse(createdAt).hour;
+      int minuteAfterCreate = DateTime.now().minute - DateTime.parse(createdAt).minute;
+
+      if (DateTime.parse(createdAt).hour  == DateTime.now().hour) {
+        return "$minuteAfterCreate분 전";
       }
-      return "${DateTime
-          .parse(createdAt)
-          .hour} / ${DateTime
-          .parse(createdAt)
-          .minute}";
+
+      return "$hourAfterCreate시간 전";
+
+    } else {
+      if (DateTime.parse(createdAt).month < 10) {
+        month = "${DateTime.parse(createdAt).month}월 ";
+      }
+
+      if (DateTime.parse(createdAt).day < 10) {
+        day = "${DateTime.parse(createdAt).day}일";
+      }
     }
 
-    return "${DateTime
-        .parse(createdAt)
-        .month / DateTime
-        .parse(createdAt)
-        .day}";
+    fullFormattedDate = month + day;
+    return fullFormattedDate;
+  }
+
+  double widthForMessage(double height, double width) {
+    if (height > 1000) {
+      return width * 0.06;
+    }
+
+    if (height > 700 && height < 1000) {
+      return width * 0.11;
+    }
+
+    return width * 0.11;
+  }
+
+  double widthForDate(double height, double width) {
+    if (height > 1000) {
+      return width * 0.08;
+    }
+
+    if (height > 700 && height < 1000) {
+      return width * 0.18;
+    }
+
+    return width * 0.2;
   }
 }

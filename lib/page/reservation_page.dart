@@ -23,7 +23,7 @@ class _ReservationPageState extends State<ReservationPage> {
           color: Colors.white,
         ),
         backgroundColor: Colors.black,
-        toolbarHeight: 80,
+        toolbarHeight: 60,
         title: const Text(
           "예약",
           style: TextStyle(

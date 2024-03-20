@@ -38,7 +38,7 @@ class _LoginPageState extends State<SignUpPage> {
           color: Colors.white,
         ),
         backgroundColor: Colors.black,
-        toolbarHeight: 80,
+        toolbarHeight: 60,
         title: const Text(
           "회원가입",
           style: TextStyle(
