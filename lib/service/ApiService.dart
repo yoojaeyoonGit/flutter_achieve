@@ -119,4 +119,32 @@ class ApiService {
     }
     throw Error();
   }
+
+  static Future<BoardModel> getOneBoard(int id) async {
+    final AuthStorage authStorage = AuthStorage();
+
+    final url =
+    Uri.parse("$baseUrl/api/boards/$id");
+    String? accessToken = await authStorage.readAccessToken();
+
+    final response =
+    await http.get(url, headers: {"Authorization": '$accessToken'});
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> parsedPost =
+      jsonDecode(utf8.decode(response.bodyBytes));
+
+      BoardModel boardsModel =  BoardModel.fromJson(parsedPost);
+
+      print(boardsModel.title);
+
+      return boardsModel;
+    }
+    else {
+      final errorJsonData = jsonDecode(utf8.decode(response.bodyBytes));
+      print("Business code: ${ErrorRequestModel.fromJson(errorJsonData).businessCode}");
+      print("Error message: ${ErrorRequestModel.fromJson(errorJsonData).errorMessage}");
+    }
+    throw Error();
+  }
 }
