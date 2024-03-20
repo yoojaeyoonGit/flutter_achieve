@@ -30,7 +30,7 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
           color: Colors.white,
         ),
         backgroundColor: Colors.black,
-        toolbarHeight: 80,
+        toolbarHeight: 60,
         title: const Text(
           "공지사항",
           style: TextStyle(
@@ -51,32 +51,24 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
                         if (index == 0) {
                           return Column(
                             children: [
-                              Container(
-                                height: 10,
-                                color: Colors.grey.shade300,
+                              const SizedBox(
+                                height: 20,
                               ),
                               board(index, snapshot.data![index]),
                             ],
                           );
                         }
-                        if (index == snapshot.data!.length - 1) {
+                        else {
                           return Column(
                             children: [
                               board(index, snapshot.data![index]),
-                              Container(
-                                height: 10,
-                                color: Colors.grey.shade300,
-                              ),
                             ],
                           );
-                        } else {
-                          return board(index, snapshot.data![index]);
                         }
                       },
                       separatorBuilder: (context, index) {
-                        return Container(
-                          color: Colors.grey.shade300,
-                          height: 10,
+                        return const SizedBox(
+                          height: 15,
                         );
                       },
                       itemCount: snapshot.data!.length);
@@ -136,23 +128,23 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
     return false;
   }
 
-  InkWell board(int index, BoardModel boardModel) {
+  GestureDetector board(int index, BoardModel boardModel) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         currentIndex = index;
         isTapped = true;
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NoticeBoardDetailPage(
-                    title: boardModel.title,
-                    content: boardModel.context))).then((value) => setState(() {
-              print(boardModel.title);
-              isTapped = false;
-            }));
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        NoticeBoardDetailPage(id: boardModel.id)))
+            .then((value) => setState(() {
+                  print(boardModel.title);
+                  isTapped = false;
+                }));
       },
       onTapCancel: () {
         setState(() {
@@ -172,13 +164,24 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        color: isTappedCondition(currentIndex, index)
-            ? Colors.grey.shade500
-            : Colors.white,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.4), // 그림자 색상 및 투명도
+              spreadRadius: 3, // 그림자 전파 반경
+              blurRadius: 8, // 그림자 흐림 반경
+              offset: const Offset(0, 8), // 그림자 위치
+            ),
+          ],
+          borderRadius: BorderRadius.circular(15),
+          color: isTappedCondition(currentIndex, index)
+              ? Colors.grey.shade300
+              : Colors.white,
+        ),
         height: boardHeight(
           height,
         ),
-        width: width,
+        width: width * 0.95,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -231,16 +234,5 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
     }
 
     return height * 0.2;
-  }
-
-  String dateFormatter(String createdAt) {
-    if (DateTime.parse(createdAt).day == DateTime.now().day) {
-      if (DateTime.parse(createdAt).hour < 10) {
-        return "0${DateTime.parse(createdAt).hour} / ${DateTime.parse(createdAt).minute}";
-      }
-      return "${DateTime.parse(createdAt).hour} / ${DateTime.parse(createdAt).minute}";
-    }
-
-    return "${DateTime.parse(createdAt).month / DateTime.parse(createdAt).day}";
   }
 }
