@@ -41,45 +41,48 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
       body: Column(
         children: [
           Expanded(
-            child: FutureBuilder(
-              future: noticeBoards,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<BoardModel>> snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.separated(
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return Column(
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              board(index, snapshot.data![index]),
-                            ],
+            child: RefreshIndicator(
+              onRefresh: () async {  },
+              child: FutureBuilder(
+                future: noticeBoards,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<BoardModel>> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.separated(
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return Column(
+                              children: [
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                board(index, snapshot.data![index]),
+                              ],
+                            );
+                          }
+                          else {
+                            return Column(
+                              children: [
+                                board(index, snapshot.data![index]),
+                              ],
+                            );
+                          }
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: 15,
                           );
-                        }
-                        else {
-                          return Column(
-                            children: [
-                              board(index, snapshot.data![index]),
-                            ],
-                          );
-                        }
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          height: 15,
-                        );
-                      },
-                      itemCount: snapshot.data!.length);
-                }
+                        },
+                        itemCount: snapshot.data!.length);
+                  }
 
-                return const Center(
-                    child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
-                ));
-              },
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ));
+                },
+              ),
             ),
           ),
         ],

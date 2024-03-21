@@ -10,7 +10,7 @@ import '../models/error_request_model.dart';
 import '../models/notice_board_model.dart';
 
 class ApiService {
-  static const String baseUrl = "http://localhost:8080";
+  static const String baseUrl = "http://192.168.213.110:8080";
 
   // static final AuthStorage authStorage = AuthStorage();
 
@@ -162,6 +162,38 @@ class ApiService {
       Map<String, dynamic> receivedComments =
           jsonDecode(utf8.decode(response.bodyBytes));
       return receivedCommentModels(receivedComments);
+    } else {
+      final errorJsonData = jsonDecode(utf8.decode(response.bodyBytes));
+      print(
+          "Business code: ${ErrorRequestModel.fromJson(errorJsonData).businessCode}");
+      print(
+          "Error message: ${ErrorRequestModel.fromJson(errorJsonData).errorMessage}");
+    }
+    throw Error();
+  }
+
+  static Future<int> createComment(String content, int boardId) async {
+    final AuthStorage authStorage = AuthStorage();
+
+    final url = Uri.parse("$baseUrl/api/comments");
+    String? accessToken = await authStorage.readAccessToken();
+
+    Map data = {
+      "boardId" : boardId,
+      "context" : content,
+    };
+
+    var body = json.encode(data);
+
+    final response = await http.post(url,
+        headers: {
+          "Authorization": '$accessToken',
+          "Content-Type": "application/json"
+        },
+        body: body);
+
+    if (response.statusCode == 201) {
+      return 201;
     } else {
       final errorJsonData = jsonDecode(utf8.decode(response.bodyBytes));
       print(

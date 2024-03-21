@@ -195,8 +195,6 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetailPage> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            // const FaIcon(
-                                            //   FontAwesomeIcons.solidComment,
                                             const Icon(
                                               Icons.mode_comment,
                                               size: 18,
@@ -303,8 +301,11 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetailPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 23, right: 23,
-                  top: 10, bottom: checkHeight(height) ? 12 : 26),
+              padding: EdgeInsets.only(
+                  left: 23,
+                  right: 23,
+                  top: 10,
+                  bottom: checkHeight(height) ? 12 : 26),
               child: Container(
                 width: width - 20,
                 decoration: BoxDecoration(
@@ -318,11 +319,6 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetailPage> {
                     ),
                     Expanded(
                       child: TextField(
-                        onTap: () {
-                          setState(() {
-                            // labelTextForComment = null;
-                          });
-                        },
                         onChanged: (value) {
                           setState(() {
                             isEmptyTextField = false;
@@ -330,7 +326,7 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetailPage> {
                               isEmptyTextField = true;
                             }
                           });
-                        },
+                        }, 
                         // keyboardType: TextInputType.multiline,
                         maxLines: isEmptyTextField ? 1 : 3,
                         cursorColor: Colors.white,
@@ -338,27 +334,32 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetailPage> {
                         cursorHeight: 20,
                         style: TextStyle(
                             fontSize: checkHeight(height) ? 14 : 17,
-                            color: Colors.white, fontWeight: FontWeight.w500),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500),
                         controller: _commentController,
                         decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                            contentPadding: const EdgeInsets.only(bottom: 4),
                             border: InputBorder.none,
                             hintText: labelTextForComment,
                             hintStyle: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
-                            fontSize: 14)
-                        ),
+                                fontSize: 14)),
                       ),
                     ),
                     SizedBox(
                       width: width * 0.1,
                       child: IconButton(
-                        onPressed: () {
-                          print('sdfvr');
+                        onPressed: () async {
+                          await ApiService.createComment(
+                              _commentController.text, widget.id);
+
+                          setState(() {
+                            comments = ApiService.getCommentsByBoardId(
+                                widget.id, "20");
+                          });
                         },
-                        icon: const FaIcon(
-                            FontAwesomeIcons.penToSquare),
+                        icon: const FaIcon(FontAwesomeIcons.penToSquare),
                         iconSize: 18,
                         color: Colors.white,
                       ),
@@ -382,8 +383,10 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetailPage> {
       }
 
       if (DateTime.now().day - parsedCreatedTime.day == 1) {
-
-        if (DateTime.now().subtract(Duration(hours: parsedCreatedTime.hour)).hour == 0) {
+        if (DateTime.now()
+                .subtract(Duration(hours: parsedCreatedTime.hour))
+                .hour ==
+            0) {
           return "${parsedCreatedTime.month} / ${parsedCreatedTime.day}";
         }
         return "${DateTime.now().subtract(Duration(hours: parsedCreatedTime.hour)).hour} 시간 전";
