@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:m2/main.dart';
-import 'package:m2/page/login_page.dart';
-import 'package:m2/page/sign_up_page.dart';
-import 'package:m2/widget/basicFuntionbutton.dart';
+import 'package:m2/common/widget/w_bottom_nav_button.dart';
+import 'f_login.dart';
+import 'f_sign_up.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -61,40 +61,24 @@ class _AuthPageState extends State<AuthPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          // builder: (context) => const ReservationPage()),
-                            builder: (context) => const SignUpPage()),
-                      );
-
-                    },
-                    child: BasicFunction(
-                      height: height,
-                      width: width,
-                      title: "회원가입",
-                      status: Status.signUp,
-                      fontSize: fontSize,
-                      iconSize: iconSize,
-                    ),
+                  BottomNavButtonWidget(
+                    height: height,
+                    width: width,
+                    title: "회원가입",
+                    status: Status.signUp,
+                    fontSize: fontSize,
+                    iconSize: iconSize,
+                    fragment: const SignUpFragment(),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()),
-                      );
-                    },
-                    child: BasicFunction(
-                        height: height,
-                        width: width,
-                        title: "로그인",
-                        status: Status.signIn,
-                        fontSize: fontSize,
-                        iconSize: iconSize),
+
+                  BottomNavButtonWidget(
+                    height: height,
+                    width: width,
+                    title: "로그인",
+                    status: Status.signIn,
+                    fontSize: fontSize,
+                    iconSize: iconSize,
+                    fragment: const LoginFragment(),
                   ),
                 ],
               ),

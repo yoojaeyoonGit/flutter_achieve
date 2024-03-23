@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:m2/clubRoom/reservation/room.dart';
 import 'package:m2/models/room_model.dart';
+import 'package:m2/screen/main/screen/reservation/vo/vo_room.dart';
+import 'package:m2/screen/main/screen/reservation/w_room_select.dart';
 import 'package:m2/service/ApiService.dart';
 
-class ReservationPage extends StatefulWidget {
-  const ReservationPage({super.key});
+class ReservationFragment extends StatefulWidget {
+  const ReservationFragment({super.key});
 
   @override
-  State<ReservationPage> createState() => _ReservationPageState();
+  State<ReservationFragment> createState() => _ReservationFragmentState();
 }
 
-class _ReservationPageState extends State<ReservationPage> {
+class _ReservationFragmentState extends State<ReservationFragment> {
   final Future<List<RoomModel>> rooms = ApiService.getRooms();
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width / 2;
@@ -54,10 +56,9 @@ class _ReservationPageState extends State<ReservationPage> {
               }
               return const Center(
                   child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
-                  )
-              );
+                strokeWidth: 2,
+                color: Colors.white,
+              ));
             }),
       ]),
     );
@@ -69,19 +70,19 @@ class _ReservationPageState extends State<ReservationPage> {
       itemCount: snapshot.data!.length,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       itemBuilder: (context, index) {
-        var room = snapshot.data![index];
+        var roomModel = snapshot.data![index];
         return Container(
-          decoration: BoxDecoration(
-            boxShadow: [
+            decoration: BoxDecoration(boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.4), // 그림자 색상 및 투명도
                 spreadRadius: 8, // 그림자 전파 반경
                 blurRadius: 12, // 그림자 흐림 반경
                 offset: const Offset(0, 8), // 그림자 위치
               )
-            ]
-          ),
-            child: Room(roomName: room.roomName, description: room.description, id: room.id));
+            ]),
+            child: RoomSelectWidget(
+                room: Room(
+                    roomModel.id, roomModel.roomName, roomModel.description)));
       },
       separatorBuilder: (context, index) => SizedBox(
         height: height * 0.07,

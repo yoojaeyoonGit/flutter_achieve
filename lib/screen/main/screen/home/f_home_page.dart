@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:m2/main.dart';
-import 'package:m2/page/notice_board_page.dart';
-import 'package:m2/page/reservation_page.dart';
-import 'package:m2/widget/basicFuntionbutton.dart';
+import 'package:m2/screen/main/screen/board/f_notice_board.dart';
+import 'package:m2/common/widget/w_bottom_nav_button.dart';
+import 'package:velocity_x/velocity_x.dart';
+
+import '../board/vo/vo_board.dart';
+import '../reservation/f_reservation_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +17,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final List basicFragmentList = <Widget>[
+    const NoticeBoardFragment(),
+    const ReservationFragment(),
+  ];
+
   final PageController pageController = PageController(initialPage: 0);
   int currentPage = 0;
   int pageCount = 12;
@@ -54,8 +62,8 @@ class _HomePageState extends State<HomePage> {
 
     double width = MediaQuery.of(context).size.width / 2.6;
 
-    List<Padding> pages =
-        List.generate(pageCount, (index) => listItem(fontSize, width2, height, currentPage, pageCount));
+    List<Padding> pages = List.generate(pageCount,
+        (index) => listItem(fontSize, width2, height, currentPage, pageCount));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -74,7 +82,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(top: 3, bottom: 12),
-                child: pageViewList(width,  pages),
+                child: pageViewList(width, pages),
               ),
             ),
             SizedBox(
@@ -82,53 +90,67 @@ class _HomePageState extends State<HomePage> {
               child: Image.network(
                   "https://author-picture.s3.ap-northeast-2.amazonaws.com/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA+2024-02-14+%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE+10.11.18.png"),
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: height / 2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      timer.cancel();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ReservationPage()),
-                      ).then((_) => {
-                        bannerTimer(),
-                      });
-                    },
-                    child: BasicFunction(
-                      height: height,
-                      width: width,
-                      title: "동아리방 예약",
-                      status: Status.reservation,
-                      fontSize: fontSize,
-                      iconSize: iconSize,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      timer.cancel();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NoticeBoardPage()),
-                      ).then((_) => {
-                        bannerTimer(),
-                      });
-                    },
-                    child: BasicFunction(
-                        height: height,
-                        width: width,
-                        title: "공지사항",
-                        status: Status.notification,
-                        fontSize: fontSize,
-                        iconSize: iconSize),
-                  ),
-                ],
-              ),
-            )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                BottomNavButtonWidget(
+                    height: height,
+                    width: width,
+                    title: "동아리방 예약",
+                    status: Status.reservation,
+                    fontSize: fontSize,
+                    iconSize: iconSize,
+                    fragment: const ReservationFragment()),
+                // GestureDetector(
+                //   onTap: () {
+                //     timer.cancel();
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => const ReservationFragment()),
+                //     ).then((_) => {
+                //       bannerTimer(),
+                //     });
+                //   },
+                //   child: BasicFunction(
+                //     height: height,
+                //     width: width,
+                //     title: "동아리방 예약",
+                //     status: Status.reservation,
+                //     fontSize: fontSize,
+                //     iconSize: iconSize,
+                //   ),
+                // ),
+
+                BottomNavButtonWidget(
+                    height: height,
+                    width: width,
+                    title: "공지사항",
+                    status: Status.notification,
+                    fontSize: fontSize,
+                    iconSize: iconSize,
+                    fragment: const NoticeBoardFragment()),
+                // GestureDetector(
+                //   onTap: () {
+                //     timer.cancel();
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => const NoticeBoardFragment()),
+                //     ).then((_) => {
+                //           bannerTimer(),
+                //         });
+                //   },
+                //   child: BasicFunction(
+                //       height: height,
+                //       width: width,
+                //       title: "공지사항",
+                //       status: Status.notification,
+                //       fontSize: fontSize,
+                //       iconSize: iconSize),
+                // ),
+              ],
+            ).pOnly(bottom: height / 2)
           ],
         ),
       ),
@@ -140,9 +162,9 @@ class _HomePageState extends State<HomePage> {
       controller: pageController,
       itemCount: pages.length,
       onPageChanged: (page) {
-        // setState(() {
-        //   currentPage = page;
-        // });
+        setState(() {
+          currentPage = page;
+        });
       },
       itemBuilder: (context, index) {
         return pages[index];
@@ -150,7 +172,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Padding listItem(double fontSize, double width, double height, currentPage, pageLength) {
+  Padding listItem(
+      double fontSize, double width, double height, currentPage, pageLength) {
     return Padding(
       padding: EdgeInsets.only(left: 12.0, top: height * 0.3, right: 12),
       child: Container(

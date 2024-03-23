@@ -3,19 +3,20 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:m2/models/error_request_model.dart';
-import 'package:m2/page/login_page.dart';
 import 'package:m2/service/ApiService.dart';
 
-import '../models/email_request_model.dart';
+import '../../../../models/email_request_model.dart';
+import 'f_login.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+
+class SignUpFragment extends StatefulWidget {
+  const SignUpFragment({super.key});
 
   @override
-  State<SignUpPage> createState() => _LoginPageState();
+  State<SignUpFragment> createState() => _SignUpFragmentState();
 }
 
-class _LoginPageState extends State<SignUpPage> {
+class _SignUpFragmentState extends State<SignUpFragment> {
   final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerAuthCode = TextEditingController();
@@ -272,7 +273,7 @@ class _LoginPageState extends State<SignUpPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginPage()));
+                                  builder: (context) => const LoginFragment()));
                         });
                       } else {
                         final signUpRequestApply =

@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:m2/log_in_status.dart';
-import 'package:m2/page/auth_page.dart';
-import 'package:m2/page/home_page.dart';
+import 'package:m2/screen/main/screen/auth/f_auth.dart';
+import 'package:m2/screen/main/screen/home/f_home_page.dart';
 import 'package:m2/secure_storage.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +31,7 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => UserProvider(),
-      child: Achieve(),
+      child: const Achieve(),
     ),
   );
 }
@@ -49,12 +49,6 @@ class _AchieveState extends State<Achieve> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // theme: ThemeData(
-      //   colorScheme: ColorScheme.light(
-      //     primary: Colors.black, // 헤더 배경색 및 선택된 날짜 색상 변경
-      //     onPrimary: Colors.white, // 헤더 텍스트 색상 변경
-      //   ),
-      // ),
       home: Consumer<UserProvider>(builder: (context, userProvider, _) {
         return Scaffold(
           body: userProvider.isLoggedIn

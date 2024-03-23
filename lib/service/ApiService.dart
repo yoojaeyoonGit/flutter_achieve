@@ -10,7 +10,7 @@ import '../models/error_request_model.dart';
 import '../models/notice_board_model.dart';
 
 class ApiService {
-  static const String baseUrl = "http://192.168.213.110:8080";
+  static const String baseUrl = "http://localhost:8080";
 
   // static final AuthStorage authStorage = AuthStorage();
 

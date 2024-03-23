@@ -5,17 +5,18 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:m2/clubRoom/reservation/Avail_reservation_time_check.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:m2/models/email_request_model.dart';
+import 'package:m2/screen/main/screen/reservation/vo/vo_room.dart';
 import 'package:m2/service/ApiService.dart';
 
-class RoomDetail extends StatefulWidget {
-  final String roomName;
-  final int id;
+import 'd_avail_reservation_time_check.dart';
 
-  const RoomDetail({super.key, required this.roomName, required this.id});
+class RoomDetail extends StatefulWidget {
+  final Room room;
+
+  const RoomDetail({super.key, required this.room});
 
   @override
   State<RoomDetail> createState() => _RoomDetailState();
@@ -95,7 +96,7 @@ class _RoomDetailState extends State<RoomDetail> {
           color: Colors.white,
         ),
         title: Text(
-          widget.roomName,
+          widget.room.name,
           style: const TextStyle(
             color: Colors.white,
           ),
@@ -105,7 +106,7 @@ class _RoomDetailState extends State<RoomDetail> {
         children: [
           Expanded(
             child: Hero(
-              tag: widget.id,
+              tag: widget.room.id,
               child: PageView.builder(
                 controller: pageController,
                 pageSnapping: true,
@@ -140,7 +141,7 @@ class _RoomDetailState extends State<RoomDetail> {
                     height: height * 0.15,
                     child: Column(
                       children: [
-                        AvailReservationTime(id: widget.id),
+                        AvailReservationTime(id: widget.room.id),
                       ],
                     ),
                   ),
@@ -265,7 +266,7 @@ class _RoomDetailState extends State<RoomDetail> {
                                   print(
                                       "${selectedFullDate.add(const Duration(hours: 1)).subtract(const Duration(seconds: 1))}");
                                   ApiService.makeReservation(
-                                      widget.id,
+                                      widget.room.id,
                                       selectedFullDate,
                                       selectedFullDate
                                           .add(const Duration(hours: 1))

@@ -3,20 +3,21 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:m2/log_in_status.dart';
-import 'package:m2/page/home_page.dart';
 import 'package:m2/secure_storage.dart';
 import 'package:m2/service/ApiService.dart';
 
-import '../models/error_request_model.dart';
+import '../../../../models/error_request_model.dart';
+import '../home/f_home_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+
+class LoginFragment extends StatefulWidget {
+  const LoginFragment({super.key});
 
   @override
-  State<LoginPage> createState() => _SignUpPageState();
+  State<LoginFragment> createState() => _LoginFragmentState();
 }
 
-class _SignUpPageState extends State<LoginPage> {
+class _LoginFragmentState extends State<LoginFragment> {
   final AuthStorage secureStorage = AuthStorage();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();

@@ -7,7 +7,8 @@ import 'package:m2/widget/informationList.dart';
 import 'package:m2/service/ApiService.dart';
 import 'package:m2/widget/reservation_avail_list.dart';
 
-import '../../models/Reserved_time_model.dart';
+import '../../../../common/widget/w_height_and_width.dart';
+import '../../../../models/Reserved_time_model.dart';
 
 class AvailReservationTime extends StatefulWidget {
   final int id;
@@ -166,7 +167,6 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                 (BuildContext context, StateSetter setState) {
                               return SizedBox(
                                 width: width * 0.9,
-                                // width: width * 0.04,
                                 height: height * 0.85,
                                 child: Column(
                                   children: [
@@ -287,7 +287,8 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                             CrossAxisAlignment.center,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 8.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
                                             child: Text(
                                               "${availListDate.year}년",
                                               style:
@@ -328,9 +329,8 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                                         Icons.chevron_left)),
                                                 const Padding(
                                                   padding: EdgeInsets.only(
-                                                      right: 5.0),
+                                                      right: 3.0),
                                                 ),
-
                                                 FutureBuilder<
                                                     List<ReservedTimeModel>>(
                                                   future: reservedListFromApi,
@@ -345,7 +345,7 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                                       return Center(
                                                           child: Text(
                                                               'Error: ${snapshot.error}'));
-                                                    } else { 
+                                                    } else {
                                                       if (firstDayReservedAvailList
                                                           .isNotEmpty) {
                                                         return ReservationAvailListView(
@@ -389,10 +389,6 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                                     }
                                                   },
                                                 ),
-                                                // const Padding(
-                                                //   padding: EdgeInsets.only(
-                                                //       right: 50.0),
-                                                // ),
                                                 IconButton(
                                                     onPressed: () async {
                                                       setState(() {
@@ -476,9 +472,7 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700),
                           ),
-                          SizedBox(
-                            width: 4,
-                          ),
+                          width5,
                           Icon(
                             Icons.watch_later_outlined,
                             color: Colors.white,

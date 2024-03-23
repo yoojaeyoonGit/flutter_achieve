@@ -2,21 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:m2/models/comment_model.dart';
+import 'package:m2/screen/main/screen/board/w_board_stat.dart';
 import 'package:m2/service/ApiService.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../models/notice_board_model.dart';
+import '../../../../common/widget/w_height_and_width.dart';
+import '../../../../models/notice_board_model.dart';
 
-class NoticeBoardDetailPage extends StatefulWidget {
+class NoticeBoardDetail extends StatefulWidget {
   final int id;
 
-  const NoticeBoardDetailPage({super.key, required this.id});
+  const NoticeBoardDetail({super.key, required this.id});
 
   @override
-  State<NoticeBoardDetailPage> createState() => _NoticeBoardDetailPageState();
+  State<NoticeBoardDetail> createState() => _NoticeBoardDetailPageState();
 }
 
-class _NoticeBoardDetailPageState extends State<NoticeBoardDetailPage> {
+class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
   late Future<BoardModel> boards;
   late Future<List<CommentModel>> comments;
   final TextEditingController _commentController = TextEditingController();
@@ -153,63 +155,64 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetailPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Container(
-                                        height: 27,
-                                        width: widthForViewCount(height, width),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const FaIcon(
-                                              FontAwesomeIcons.bookOpenReader,
-                                              size: 18,
-                                              color: Colors.white,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              "${snapshot.data!.viewCount}",
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Container(
-                                        height: 27,
-                                        width: widthForViewCount(height, width),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.mode_comment,
-                                              size: 18,
-                                              color: Colors.white,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              "${snapshot.data!.commentCount}",
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      BoardStatWidget(boardModel: snapshot.data!, category: "detailCommentCount"),
+                                      width15,
+                                      BoardStatWidget(boardModel: snapshot.data!, category: "detailReadCount"),
+                                      // Container(
+                                      //   height: 27,
+                                      //   width: widthForViewCount(height, width),
+                                      //   decoration: BoxDecoration(
+                                      //     color: Colors.black,
+                                      //     borderRadius:
+                                      //         BorderRadius.circular(15),
+                                      //   ),
+                                      //   child: Row(
+                                      //     mainAxisAlignment:
+                                      //         MainAxisAlignment.center,
+                                      //     children: [
+                                      //       const FaIcon(
+                                      //         FontAwesomeIcons.bookOpenReader,
+                                      //         size: 18,
+                                      //         color: Colors.white,
+                                      //       ),
+                                      //       const SizedBox(width: 10),
+                                      //       Text(
+                                      //         "${snapshot.data!.viewCount}",
+                                      //         style: const TextStyle(
+                                      //           color: Colors.white,
+                                      //         ),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
+
+                                      // Container(
+                                      //   height: 27,
+                                      //   width: widthForViewCount(height, width),
+                                      //   decoration: BoxDecoration(
+                                      //     color: Colors.black,
+                                      //     borderRadius:
+                                      //         BorderRadius.circular(15),
+                                      //   ),
+                                      //   child: Row(
+                                      //     mainAxisAlignment:
+                                      //         MainAxisAlignment.center,
+                                      //     children: [
+                                      //       const Icon(
+                                      //         Icons.mode_comment,
+                                      //         size: 18,
+                                      //         color: Colors.white,
+                                      //       ),
+                                      //       const SizedBox(width: 10),
+                                      //       Text(
+                                      //         "${snapshot.data!.commentCount}",
+                                      //         style: const TextStyle(
+                                      //           color: Colors.white,
+                                      //         ),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                   const SizedBox(
@@ -326,7 +329,7 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetailPage> {
                               isEmptyTextField = true;
                             }
                           });
-                        }, 
+                        },
                         // keyboardType: TextInputType.multiline,
                         maxLines: isEmptyTextField ? 1 : 3,
                         cursorColor: Colors.white,
