@@ -1,15 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:m2/log_in_status.dart';
 import 'package:m2/screen/main/screen/auth/f_auth.dart';
 import 'package:m2/screen/main/screen/home/f_home_page.dart';
 import 'package:m2/secure_storage.dart';
 import 'package:provider/provider.dart';
-
-import 'models/error_request_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -26,35 +24,44 @@ enum Status {
   notification
 }
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  timeago.setLocaleMessages('ko', timeago.KoMessages());
   HttpOverrides.global = MyHttpOverrides();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => UserProvider(),
-      child: const Achieve(),
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ko')],
+      fallbackLocale: const Locale('en'),
+      path: 'assets/translations',
+      child: const FirstPageFragment(),
     ),
   );
 }
 
-class Achieve extends StatefulWidget {
-  const Achieve({super.key});
+class FirstPageFragment extends StatefulWidget {
+  const FirstPageFragment({super.key});
 
   @override
-  State<Achieve> createState() => _AchieveState();
+  State<FirstPageFragment> createState() => _FirstPageFragmentState();
 }
 
-class _AchieveState extends State<Achieve> {
+class _FirstPageFragmentState extends State<FirstPageFragment> {
   final AuthStorage secureStorage = AuthStorage();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Consumer<UserProvider>(builder: (context, userProvider, _) {
-        return Scaffold(
-          body: userProvider.isLoggedIn
-              ? const HomePage() : const AuthPage(),
-        );
-      }),
+    return ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: MaterialApp(
+        locale: const Locale("ko"),
+        home: Consumer<UserProvider>(builder: (context, userProvider, _) {
+          return Scaffold(
+            body: userProvider.isLoggedIn
+                ? const HomePage() : const AuthPage(),
+          );
+        }),
+      ),
     );
   }
 }

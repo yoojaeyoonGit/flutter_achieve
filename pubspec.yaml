@@ -35,6 +35,8 @@ dependencies:
   provider: ^6.1.2
   nav: ^1.4.3
   velocity_x: ^4.1.2
+  timeago: ^3.6.1
+  easy_localization: ^3.0.5
 
   font_awesome_flutter: ^10.7.0
   # The following adds the Cupertino Icons font to your application.
@@ -63,7 +65,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  assets:
+    - assets/translations/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

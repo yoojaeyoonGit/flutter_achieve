@@ -70,7 +70,6 @@ class _AuthPageState extends State<AuthPage> {
                     iconSize: iconSize,
                     fragment: const SignUpFragment(),
                   ),
-
                   BottomNavButtonWidget(
                     height: height,
                     width: width,

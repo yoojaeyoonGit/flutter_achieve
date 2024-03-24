@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:m2/screen/main/screen/board/vo/board_type.dart';
-import 'package:m2/screen/main/screen/board/vo/vo_board.dart';
 import 'package:m2/screen/main/screen/board/w_board_stat.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -8,6 +9,8 @@ import '../../../../common/widget/w_height_and_width.dart';
 import '../../../../models/notice_board_model.dart';
 import '../../../../service/ApiService.dart';
 import 'f_notice_board_detail.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
 
 class BoardItemWidget extends StatefulWidget {
   final int index;
@@ -97,10 +100,20 @@ class _BoardItemWidgetState extends State<BoardItemWidget> {
                     Row(
                       children: [
                         BoardStatWidget(
-                            boardModel: widget.boardModel, category: "commentCount"),
+                          boardModel: widget.boardModel,
+                          text: widget.boardModel.commentCount.toString(),
+                          height: 20,
+                          width: 55,
+                          iconData: FontAwesomeIcons.comment,
+                        ),
                         width10,
                         BoardStatWidget(
-                            boardModel: widget.boardModel, category: "date"),
+                          boardModel: widget.boardModel,
+                          text: timeago.format(DateTime.parse(widget.boardModel.createdAt), locale: context.locale.languageCode),
+                          height: 20,
+                          width: 65,
+                          iconData: FontAwesomeIcons.calendar,
+                        ),
                       ],
                     )
                   ],

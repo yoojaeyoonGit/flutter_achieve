@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,9 +6,11 @@ import 'package:m2/models/comment_model.dart';
 import 'package:m2/screen/main/screen/board/w_board_stat.dart';
 import 'package:m2/service/ApiService.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../../common/widget/w_height_and_width.dart';
 import '../../../../models/notice_board_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class NoticeBoardDetail extends StatefulWidget {
   final int id;
@@ -25,6 +28,7 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
   bool isEmptyTextField = true;
   String? labelTextForComment = "댓글을 입력하세요.";
 
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +38,7 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
 
   @override
   Widget build(BuildContext context) {
+    // final formatter = DateFormat('M월 d일', context.locale.languageCode);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return GestureDetector(
@@ -118,14 +123,14 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                                                   fontSize: 14,
                                                 ),
                                               ),
-                                              Text(
-                                                timeFormatter(
-                                                    snapshot.data!.createdAt,
-                                                    "board"),
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                ),
-                                              ),
+                                              timeago
+                                                  .format(
+                                                      DateTime.parse(snapshot
+                                                          .data!.createdAt),
+                                                      locale: context
+                                                          .locale.languageCode)
+                                                  .text
+                                                  .make(),
                                             ],
                                           ),
                                         ),
@@ -155,64 +160,27 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      BoardStatWidget(boardModel: snapshot.data!, category: "detailCommentCount"),
+                                      BoardStatWidget(
+                                        boardModel: snapshot.data!,
+                                        text: snapshot.data!.commentCount
+                                            .toString(),
+                                        //timeago
+                                        //  .format(DateTime.parse(snapshot.data!.createdAt), locale: context.locale.languageCode),
+                                        height: 30,
+                                        width: 80,
+                                        iconData: FontAwesomeIcons.solidComment,
+                                      ),
+                                      //category: "detailCommentCount"
                                       width15,
-                                      BoardStatWidget(boardModel: snapshot.data!, category: "detailReadCount"),
-                                      // Container(
-                                      //   height: 27,
-                                      //   width: widthForViewCount(height, width),
-                                      //   decoration: BoxDecoration(
-                                      //     color: Colors.black,
-                                      //     borderRadius:
-                                      //         BorderRadius.circular(15),
-                                      //   ),
-                                      //   child: Row(
-                                      //     mainAxisAlignment:
-                                      //         MainAxisAlignment.center,
-                                      //     children: [
-                                      //       const FaIcon(
-                                      //         FontAwesomeIcons.bookOpenReader,
-                                      //         size: 18,
-                                      //         color: Colors.white,
-                                      //       ),
-                                      //       const SizedBox(width: 10),
-                                      //       Text(
-                                      //         "${snapshot.data!.viewCount}",
-                                      //         style: const TextStyle(
-                                      //           color: Colors.white,
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
-
-                                      // Container(
-                                      //   height: 27,
-                                      //   width: widthForViewCount(height, width),
-                                      //   decoration: BoxDecoration(
-                                      //     color: Colors.black,
-                                      //     borderRadius:
-                                      //         BorderRadius.circular(15),
-                                      //   ),
-                                      //   child: Row(
-                                      //     mainAxisAlignment:
-                                      //         MainAxisAlignment.center,
-                                      //     children: [
-                                      //       const Icon(
-                                      //         Icons.mode_comment,
-                                      //         size: 18,
-                                      //         color: Colors.white,
-                                      //       ),
-                                      //       const SizedBox(width: 10),
-                                      //       Text(
-                                      //         "${snapshot.data!.commentCount}",
-                                      //         style: const TextStyle(
-                                      //           color: Colors.white,
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
+                                      BoardStatWidget(
+                                        boardModel: snapshot.data!,
+                                        text:
+                                            snapshot.data!.viewCount.toString(),
+                                        height: 30,
+                                        width: 95,
+                                        iconData:
+                                            FontAwesomeIcons.bookOpenReader,
+                                      ),
                                     ],
                                   ),
                                   const SizedBox(
