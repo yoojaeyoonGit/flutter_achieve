@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:m2/main.dart';
 import 'package:m2/common/widget/w_bottom_nav_button.dart';
+import '../../../../common/widget/w_appbar.dart';
 import 'f_login.dart';
 import 'f_sign_up.dart';
 
@@ -32,16 +33,7 @@ class _AuthPageState extends State<AuthPage> {
     double width = MediaQuery.of(context).size.width / 2.6;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        toolbarHeight: 60,
-        title: const Text(
-          "Achieve",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar("Achieve"),
       body: Container(
         color: Colors.white,
         child: Column(

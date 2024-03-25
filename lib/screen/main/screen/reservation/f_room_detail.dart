@@ -11,6 +11,7 @@ import 'package:m2/models/email_request_model.dart';
 import 'package:m2/screen/main/screen/reservation/vo/vo_room.dart';
 import 'package:m2/service/ApiService.dart';
 
+import '../../../../common/widget/w_appbar.dart';
 import 'd_avail_reservation_time_check.dart';
 
 class RoomDetail extends StatefulWidget {
@@ -89,19 +90,7 @@ class _RoomDetailState extends State<RoomDetail> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        toolbarHeight: 60,
-        leading: const BackButton(
-          color: Colors.white,
-        ),
-        title: Text(
-          widget.room.name,
-          style: const TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
+      appBar: CustomAppBar(widget.room.name),
       body: Column(
         children: [
           Expanded(

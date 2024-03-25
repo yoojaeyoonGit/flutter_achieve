@@ -5,10 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'package:m2/common/utils/time_utils.dart';
 import 'package:m2/models/comment_model.dart';
 import 'package:m2/screen/main/screen/board/w_board_stat.dart';
+import 'package:m2/screen/main/screen/board/w_comment.dart';
 import 'package:m2/service/ApiService.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../../../common/widget/w_appbar.dart';
 import '../../../../common/widget/w_height_and_width.dart';
 import 'vo/vo_board.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -24,7 +26,7 @@ class NoticeBoardDetail extends StatefulWidget {
 
 class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
   late Future<Board> boards;
-  late Future<List<CommentModel>> comments;
+  late Future<List<Comment>> comments;
   final TextEditingController _commentController = TextEditingController();
   bool isEmptyTextField = true;
   String? labelTextForComment = "댓글을 입력하세요.";
@@ -43,19 +45,7 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.black,
-          toolbarHeight: 60,
-          title: const Text(
-            "공지사항",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
+        appBar: const CustomAppBar("공지사항"),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -198,7 +188,7 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                               child: FutureBuilder(
                                   future: comments,
                                   builder: (BuildContext context,
-                                      AsyncSnapshot<List<CommentModel>>
+                                      AsyncSnapshot<List<Comment>>
                                           snapshot) {
                                     if (snapshot.hasData) {
                                       return ListView.separated(
@@ -206,49 +196,7 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                                         physics:
                                             const NeverScrollableScrollPhysics(),
                                         itemBuilder: (context, index) {
-                                          return Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                                border: Border.all(width: 1)),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10.0,
-                                                      horizontal: 15),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 10.0),
-                                                    child: Text(
-                                                      snapshot
-                                                          .data![index].context,
-                                                      style: const TextStyle(
-                                                          color: Colors.black),
-                                                    ),
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      TimeUtils.timeFormatterForComment(
-                                                              context,
-                                                              snapshot
-                                                                  .data![index]
-                                                                  .createdAt)
-                                                          .text
-                                                          .color(Colors
-                                                              .grey.shade600)
-                                                          .make(),
-                                                      width5,
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          );
+                                          return CommentWidget(comment: snapshot.data![index]);
                                         },
                                         separatorBuilder:
                                             (BuildContext context, int index) {

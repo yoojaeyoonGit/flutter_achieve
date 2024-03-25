@@ -6,6 +6,7 @@ import 'package:m2/log_in_status.dart';
 import 'package:m2/secure_storage.dart';
 import 'package:m2/service/ApiService.dart';
 
+import '../../../../common/widget/w_appbar.dart';
 import '../../../../models/error_request_model.dart';
 import '../home/f_home_page.dart';
 
@@ -28,16 +29,7 @@ class _LoginFragmentState extends State<LoginFragment> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        toolbarHeight: 60,
-        title: const Text(
-          "로그인",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar("로그인"),
       body: Padding(
         padding: EdgeInsets.only(top: height * 0.25),
         child: Column(

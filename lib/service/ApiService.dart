@@ -147,7 +147,7 @@ class ApiService {
     throw Error();
   }
 
-  static Future<List<CommentModel>> getCommentsByBoardId(
+  static Future<List<Comment>> getCommentsByBoardId(
       int boardId, String cursor) async {
     final AuthStorage authStorage = AuthStorage();
 
@@ -161,7 +161,7 @@ class ApiService {
     if (response.statusCode == 200) {
       Map<String, dynamic> receivedComments =
           jsonDecode(utf8.decode(response.bodyBytes));
-      return receivedCommentModels(receivedComments);
+      return receivedComment(receivedComments);
     } else {
       final errorJsonData = jsonDecode(utf8.decode(response.bodyBytes));
       print(

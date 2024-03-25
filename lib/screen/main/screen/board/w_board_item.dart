@@ -10,7 +10,6 @@ import '../../../../common/widget/w_height_and_width.dart';
 import 'vo/vo_board.dart';
 import '../../../../service/ApiService.dart';
 import 'f_notice_board_detail.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class BoardItemWidget extends StatefulWidget {
   final int index;

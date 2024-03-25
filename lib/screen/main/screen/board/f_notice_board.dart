@@ -4,6 +4,7 @@ import 'package:m2/screen/main/screen/board/vo/board_type.dart';
 import 'package:m2/screen/main/screen/board/w_board_item.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../../../common/widget/w_appbar.dart';
 import 'vo/vo_board.dart';
 import '../../../../service/ApiService.dart';
 
@@ -26,19 +27,7 @@ class _NoticeBoardFragmentState extends State<NoticeBoardFragment> {
     // double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.black,
-        toolbarHeight: 60,
-        title: const Text(
-          "공지사항",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar("공지사항"),
       body: Column(
         children: [
           Expanded(

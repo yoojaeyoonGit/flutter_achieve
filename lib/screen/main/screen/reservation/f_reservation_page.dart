@@ -4,6 +4,8 @@ import 'package:m2/screen/main/screen/reservation/vo/vo_room.dart';
 import 'package:m2/screen/main/screen/reservation/w_room_select.dart';
 import 'package:m2/service/ApiService.dart';
 
+import '../../../../common/widget/w_appbar.dart';
+
 class ReservationFragment extends StatefulWidget {
   const ReservationFragment({super.key});
 
@@ -20,19 +22,7 @@ class _ReservationFragmentState extends State<ReservationFragment> {
     double height = MediaQuery.of(context).size.height / 2;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.black,
-        toolbarHeight: 60,
-        title: const Text(
-          "예약",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar("예약"),
       body: Stack(children: [
         Image.network(
           "https://i.postimg.cc/TPRSF0MG/2023-10-15-8-26-50.png",

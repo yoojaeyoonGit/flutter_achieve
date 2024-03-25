@@ -6,6 +6,7 @@ import 'package:m2/screen/main/screen/board/f_notice_board.dart';
 import 'package:m2/common/widget/w_bottom_nav_button.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../../../common/widget/w_appbar.dart';
 import '../board/vo/vo_board.dart';
 import '../reservation/f_reservation_page.dart';
 
@@ -52,16 +53,7 @@ class _HomePageState extends State<HomePage> {
     List<Padding> pages = List.generate(pageCount,
         (index) => listItem(15, width, pageButtonHeight, currentPage, pageCount));
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        toolbarHeight: 60,
-        title: const Text(
-          "Achieve",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar("Achieve"),
       body: Container(
         color: Colors.white,
         child: Column(

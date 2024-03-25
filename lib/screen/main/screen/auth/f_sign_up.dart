@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:m2/models/error_request_model.dart';
 import 'package:m2/service/ApiService.dart';
 
+import '../../../../common/widget/w_appbar.dart';
 import '../../../../models/email_request_model.dart';
 import 'f_login.dart';
 
@@ -34,19 +35,7 @@ class _SignUpFragmentState extends State<SignUpFragment> {
 
     final List<String> dropdownItems = ['Techeer', 'Techeer Partners'];
     return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.black,
-        toolbarHeight: 60,
-        title: const Text(
-          "회원가입",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar("회원가입"),
       body: Padding(
         padding: EdgeInsets.only(top: height * 0.12, bottom: height * 0.03),
         child: Column(
