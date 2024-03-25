@@ -1,9 +1,17 @@
-import 'board_type.dart';
-
 class Board {
   final int id, viewCount, commentCount;
   final String title, context, createdAt;
-  final BoardType boardType;
 
-  Board(this.title, this.id, this.viewCount, this.commentCount, this.context, this.createdAt, this.boardType);
+  Board.fromJson(Map<String, dynamic> json)
+      : id = json["boardId"],
+        viewCount = json["viewCount"],
+        title = json["title"],
+        context = json["context"],
+        commentCount = json["commentCount"],
+        createdAt = json["createdAt"];
+}
+
+List<Board> receivedBoardModels(Map<String, dynamic> json) {
+  final List<dynamic> values = json['values'];
+  return values.map((value) => Board.fromJson(value)).toList();
 }

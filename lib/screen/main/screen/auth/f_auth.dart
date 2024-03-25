@@ -29,9 +29,6 @@ class _AuthPageState extends State<AuthPage> {
     }
 
     double height = MediaQuery.of(context).size.height / 12;
-
-    double width2 = MediaQuery.of(context).size.width;
-
     double width = MediaQuery.of(context).size.width / 2.6;
 
     return Scaffold(
@@ -65,19 +62,35 @@ class _AuthPageState extends State<AuthPage> {
                     height: height,
                     width: width,
                     title: "회원가입",
-                    status: Status.signUp,
+                    icon: Icon(
+                      Icons.perm_identity_outlined,
+                      color: Colors.white,
+                      size: iconSize,
+                    ),
                     fontSize: fontSize,
-                    iconSize: iconSize,
-                    fragment: const SignUpFragment(),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUpFragment()));
+                    },
                   ),
                   BottomNavButtonWidget(
                     height: height,
                     width: width,
+                    icon: Icon(
+                      Icons.arrow_right_alt_outlined,
+                      color: Colors.white,
+                      size: iconSize,
+                    ),
                     title: "로그인",
-                    status: Status.signIn,
                     fontSize: fontSize,
-                    iconSize: iconSize,
-                    fragment: const LoginFragment(),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginFragment()));
+                    },
                   ),
                 ],
               ),

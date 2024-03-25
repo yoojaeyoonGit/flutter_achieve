@@ -486,14 +486,6 @@ class _AvailReservationTimeState extends State<AvailReservationTime>
     );
   }
 
-  String reservationListTimeFormatter(int index) {
-    if (index < 10) {
-      return "0$index";
-    }
-
-    return "$index";
-  }
-
   String keyFormatter(DateTime dateTime, i) {
     if (i == -1) {
       return "${dateTime.year}${dateTime.month}${dateTime.day}${dateTime.hour}";

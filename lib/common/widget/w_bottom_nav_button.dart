@@ -2,55 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:m2/main.dart';
 
 class BottomNavButtonWidget extends StatelessWidget {
-  final StatefulWidget fragment;
-  final Status status;
+  // final StatefulWidget fragment;
+  final Icon icon;
   final String title;
   final double height;
   final double width;
   final double fontSize;
-  final double iconSize;
+  final void Function() onTap;
 
   const BottomNavButtonWidget(
       {super.key,
       required this.title,
       required this.height,
       required this.width,
-      required this.status,
+      required this.icon,
       required this.fontSize,
-      required this.iconSize,
-      required this.fragment});
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    IconData icon = status == Status.reservation
-        ? Icons.book_online_outlined
-        : Icons.notification_important_outlined;
-
-    if (status == Status.reservation) {
-      icon = Icons.book_online_outlined;
-    }
-
-    if (status == Status.notification) {
-      icon = Icons.notification_important_outlined;
-    }
-
-    if (status == Status.signUp) {
-      icon = Icons.perm_identity_outlined;
-    }
-
-    if (status == Status.signIn) {
-      icon = Icons.arrow_right_alt_outlined;
-    }
-
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              // builder: (context) => const ReservationPage()),
-              builder: (context) => fragment),
-        );
-      },
+      onTap: onTap,
       child: Container(
         height: height,
         width: width,
@@ -62,11 +34,7 @@ class BottomNavButtonWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              color: Colors.white,
-              size: iconSize,
-            ),
+            icon,
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
               child: Text(

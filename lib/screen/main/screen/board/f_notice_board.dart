@@ -4,7 +4,7 @@ import 'package:m2/screen/main/screen/board/vo/board_type.dart';
 import 'package:m2/screen/main/screen/board/w_board_item.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../../../models/notice_board_model.dart';
+import 'vo/vo_board.dart';
 import '../../../../service/ApiService.dart';
 
 class NoticeBoardFragment extends StatefulWidget {
@@ -15,7 +15,7 @@ class NoticeBoardFragment extends StatefulWidget {
 }
 
 class _NoticeBoardFragmentState extends State<NoticeBoardFragment> {
-  Future<List<BoardModel>> noticeBoards =
+  Future<List<Board>> noticeBoards =
       ApiService.getBoards((BoardType.noticeBoard.name.toUpperCase()), "20");
   bool isTapped = false;
   int currentIndex = 0;
@@ -45,7 +45,7 @@ class _NoticeBoardFragmentState extends State<NoticeBoardFragment> {
             child: FutureBuilder(
               future: noticeBoards,
               builder: (BuildContext context,
-                  AsyncSnapshot<List<BoardModel>> snapshot) {
+                  AsyncSnapshot<List<Board>> snapshot) {
                 if (snapshot.hasData) {
                   return ListView.separated(
                       itemBuilder: (context, index) {
@@ -55,7 +55,7 @@ class _NoticeBoardFragmentState extends State<NoticeBoardFragment> {
                               height20,
                               BoardItemWidget(
                                   index: index,
-                                  boardModel: snapshot.data![index]),
+                                  board: snapshot.data![index]),
                             ],
                           );
                         } else {
@@ -63,7 +63,7 @@ class _NoticeBoardFragmentState extends State<NoticeBoardFragment> {
                             children: [
                               BoardItemWidget(
                                   index: index,
-                                  boardModel: snapshot.data![index]),
+                                  board: snapshot.data![index]),
                             ],
                           );
                         }

@@ -1,26 +1,24 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 import '../../../../common/widget/w_height_and_width.dart';
-import '../../../../models/notice_board_model.dart';
+import 'vo/vo_board.dart';
 
 class BoardStatWidget extends StatelessWidget {
-  final BoardModel boardModel;
-  final String text;
+  final Board board;
+  final Widget text;
   final double height;
   final double width;
-  final IconData iconData;
+  final Icon icon;
 
   const BoardStatWidget({
     super.key,
-    required this.boardModel,
+    required this.board,
     required this.text,
     required this.height,
     required this.width,
-    required this.iconData,
+    required this.icon,
   });
 
   @override
@@ -32,19 +30,13 @@ class BoardStatWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       height: height,
-      //isCategoryDetail(category) ? 27 : 22,
       width: width,
-      // widthForStat(category, height, width),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            color: Colors.white,
-            iconData,
-            size: 11
-          ),
+          icon,
           width5,
-          text.text.white.make(),
+          text
         ],
       ),
     );

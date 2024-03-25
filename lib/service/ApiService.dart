@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:m2/secure_storage.dart';
 
 import '../models/error_request_model.dart';
-import '../models/notice_board_model.dart';
+import '../screen/main/screen/board/vo/vo_board.dart';
 
 class ApiService {
   static const String baseUrl = "http://localhost:8080";
@@ -97,7 +97,7 @@ class ApiService {
     throw Error();
   }
 
-  static Future<List<BoardModel>> getBoards(
+  static Future<List<Board>> getBoards(
       String category, String cursor) async {
     final AuthStorage authStorage = AuthStorage();
 
@@ -123,7 +123,7 @@ class ApiService {
     throw Error();
   }
 
-  static Future<BoardModel> getOneBoard(int id) async {
+  static Future<Board> getOneBoard(int id) async {
     final AuthStorage authStorage = AuthStorage();
 
     final url = Uri.parse("$baseUrl/api/boards/$id");
@@ -136,7 +136,7 @@ class ApiService {
       Map<String, dynamic> receivedBoard =
           jsonDecode(utf8.decode(response.bodyBytes));
 
-      return BoardModel.fromJson(receivedBoard);
+      return Board.fromJson(receivedBoard);
     } else {
       final errorJsonData = jsonDecode(utf8.decode(response.bodyBytes));
       print(

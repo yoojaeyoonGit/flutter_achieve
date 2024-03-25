@@ -1,32 +1,33 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:m2/common/utils/time_utils.dart';
 import 'package:m2/screen/main/screen/board/vo/board_type.dart';
 import 'package:m2/screen/main/screen/board/w_board_stat.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../../common/widget/w_height_and_width.dart';
-import '../../../../models/notice_board_model.dart';
+import 'vo/vo_board.dart';
 import '../../../../service/ApiService.dart';
 import 'f_notice_board_detail.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-
 class BoardItemWidget extends StatefulWidget {
   final int index;
-  final BoardModel boardModel;
-  const BoardItemWidget({super.key, required this.index, required this.boardModel});
+  final Board board;
+
+  const BoardItemWidget(
+      {super.key, required this.index, required this.board});
 
   @override
   State<BoardItemWidget> createState() => _BoardItemWidgetState();
 }
 
 class _BoardItemWidgetState extends State<BoardItemWidget> {
-  Future<List<BoardModel>> noticeBoards =
-  ApiService.getBoards((BoardType.noticeBoard.name.toUpperCase()), "20");
+  Future<List<Board>> noticeBoards =
+      ApiService.getBoards((BoardType.noticeBoard.name.toUpperCase()), "20");
   bool isTapped = false;
   int currentIndex = 0;
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +44,13 @@ class _BoardItemWidgetState extends State<BoardItemWidget> {
           currentIndex = widget.index;
           isTapped = true;
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      NoticeBoardDetail(id: widget.boardModel.id)))
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          NoticeBoardDetail(id: widget.board.id)))
               .then((value) => setState(() {
-            isTapped = false;
-          }));
+                    isTapped = false;
+                  }));
         },
         onTapCancel: () {
           setState(() {
@@ -94,25 +95,30 @@ class _BoardItemWidgetState extends State<BoardItemWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    widget.boardModel.title.text.bold.size(17).make(),
-                    widget.boardModel.context.text.black.size(15).maxLines(2).make(),
+                    widget.board.title.text.bold.size(17).make(),
+                    widget.board.context.text.black
+                        .size(15)
+                        .maxLines(2)
+                        .make(),
                     height10,
                     Row(
                       children: [
                         BoardStatWidget(
-                          boardModel: widget.boardModel,
-                          text: widget.boardModel.commentCount.toString(),
+                          board: widget.board,
+                          text: widget.board.commentCount.toString().text.size(12).color(Colors.white).make(),
                           height: 20,
                           width: 55,
-                          iconData: FontAwesomeIcons.comment,
+                          icon: const Icon(FontAwesomeIcons.comment,
+                              color: Colors.white, size: 12),
                         ),
                         width10,
                         BoardStatWidget(
-                          boardModel: widget.boardModel,
-                          text: timeago.format(DateTime.parse(widget.boardModel.createdAt), locale: context.locale.languageCode),
+                          board: widget.board,
+                          text: TimeUtils.timeFormatter(context, widget.board.createdAt).text.size(12).color(Colors.white).make(),
                           height: 20,
-                          width: 65,
-                          iconData: FontAwesomeIcons.calendar,
+                          width: 80,
+                          icon: const Icon(FontAwesomeIcons.calendar,
+                              color: Colors.white, size: 12),
                         ),
                       ],
                     )

@@ -45,25 +45,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     double listHeight = MediaQuery.of(context).size.height;
 
-    double fontSize;
-    double iconSize;
-
-    if (listHeight > 1100) {
-      fontSize = 25;
-      iconSize = 25;
-    } else {
-      fontSize = 15;
-      iconSize = 17;
-    }
-
-    double height = MediaQuery.of(context).size.height / 12;
-
-    double width2 = MediaQuery.of(context).size.width;
-
-    double width = MediaQuery.of(context).size.width / 2.6;
+    double pageButtonHeight = MediaQuery.of(context).size.height / 12;
+    double width = MediaQuery.of(context).size.width;
+    double pageButtonWidth = MediaQuery.of(context).size.width / 2.6;
 
     List<Padding> pages = List.generate(pageCount,
-        (index) => listItem(fontSize, width2, height, currentPage, pageCount));
+        (index) => listItem(15, width, pageButtonHeight, currentPage, pageCount));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -82,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(top: 3, bottom: 12),
-                child: pageViewList(width, pages),
+                child: pageViewList(pages),
               ),
             ),
             SizedBox(
@@ -94,76 +81,57 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 BottomNavButtonWidget(
-                    height: height,
-                    width: width,
+                    height: pageButtonHeight,
+                    width: pageButtonWidth,
                     title: "동아리방 예약",
-                    status: Status.reservation,
-                    fontSize: fontSize,
-                    iconSize: iconSize,
-                    fragment: const ReservationFragment()),
-                // GestureDetector(
-                //   onTap: () {
-                //     timer.cancel();
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //           builder: (context) => const ReservationFragment()),
-                //     ).then((_) => {
-                //       bannerTimer(),
-                //     });
-                //   },
-                //   child: BasicFunction(
-                //     height: height,
-                //     width: width,
-                //     title: "동아리방 예약",
-                //     status: Status.reservation,
-                //     fontSize: fontSize,
-                //     iconSize: iconSize,
-                //   ),
-                // ),
-
+                    icon: const Icon(
+                      Icons.book_online_outlined,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                    fontSize: 16,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ReservationFragment()),
+                      );
+                    }),
                 BottomNavButtonWidget(
-                    height: height,
-                    width: width,
+                    height: pageButtonHeight,
+                    width: pageButtonWidth,
                     title: "공지사항",
-                    status: Status.notification,
-                    fontSize: fontSize,
-                    iconSize: iconSize,
-                    fragment: const NoticeBoardFragment()),
-                // GestureDetector(
-                //   onTap: () {
-                //     timer.cancel();
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //           builder: (context) => const NoticeBoardFragment()),
-                //     ).then((_) => {
-                //           bannerTimer(),
-                //         });
-                //   },
-                //   child: BasicFunction(
-                //       height: height,
-                //       width: width,
-                //       title: "공지사항",
-                //       status: Status.notification,
-                //       fontSize: fontSize,
-                //       iconSize: iconSize),
-                // ),
+                    icon: const Icon(
+                      Icons.notification_important_outlined,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                    fontSize: 16,
+                    onTap: () {
+                      timer.cancel();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NoticeBoardFragment()),
+                      ).then((_) => bannerTimer());
+                    }),
               ],
-            ).pOnly(bottom: height / 2)
+            ).pOnly(bottom: pageButtonHeight / 2)
           ],
         ),
       ),
     );
   }
 
-  PageView pageViewList(double width, List<Padding> pages) {
+  PageView pageViewList(List<Padding> pages) {
     return PageView.builder(
       controller: pageController,
       itemCount: pages.length,
       onPageChanged: (page) {
         setState(() {
           currentPage = page;
+          timer.cancel();
+          bannerTimer();
         });
       },
       itemBuilder: (context, index) {
@@ -252,6 +220,7 @@ class _HomePageState extends State<HomePage> {
 
   void bannerTimer() {
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      print(currentPage);
       if (currentPage < pageCount - 1) {
         setState(() {
           currentPage++;

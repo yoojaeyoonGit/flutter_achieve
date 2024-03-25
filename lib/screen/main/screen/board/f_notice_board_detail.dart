@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:m2/common/utils/time_utils.dart';
 import 'package:m2/models/comment_model.dart';
 import 'package:m2/screen/main/screen/board/w_board_stat.dart';
 import 'package:m2/service/ApiService.dart';
@@ -9,7 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../../common/widget/w_height_and_width.dart';
-import '../../../../models/notice_board_model.dart';
+import 'vo/vo_board.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class NoticeBoardDetail extends StatefulWidget {
@@ -22,12 +23,11 @@ class NoticeBoardDetail extends StatefulWidget {
 }
 
 class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
-  late Future<BoardModel> boards;
+  late Future<Board> boards;
   late Future<List<CommentModel>> comments;
   final TextEditingController _commentController = TextEditingController();
   bool isEmptyTextField = true;
   String? labelTextForComment = "댓글을 입력하세요.";
-
 
   @override
   void initState() {
@@ -38,7 +38,6 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
 
   @override
   Widget build(BuildContext context) {
-    // final formatter = DateFormat('M월 d일', context.locale.languageCode);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return GestureDetector(
@@ -86,14 +85,14 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                                 children: [
                                   Padding(
                                     padding:
-                                        const EdgeInsets.only(bottom: 20.0),
+                                        const EdgeInsets.only(top: 10, bottom: 20.0),
                                     child: Row(
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               right: 12.0),
-                                          child: Container(
-                                            height: height * 0.08,
+                                          child: SizedBox(
+                                            height: 50,
                                             child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(99),
@@ -102,8 +101,8 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          height: height * 0.09,
+                                        SizedBox(
+                                          // height: height * 0.09,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -117,19 +116,11 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                                                   fontSize: 15,
                                                 ),
                                               ),
-                                              const Text(
-                                                "Techeer",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                              timeago
-                                                  .format(
-                                                      DateTime.parse(snapshot
-                                                          .data!.createdAt),
-                                                      locale: context
-                                                          .locale.languageCode)
+                                              "Techeer".text.size(13).make(),
+                                              TimeUtils.timeFormatter(context,
+                                                      snapshot.data!.createdAt)
                                                   .text
+                                                  .size(4)
                                                   .make(),
                                             ],
                                           ),
@@ -144,9 +135,7 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                                       fontSize: height > 700 ? 25 : 22,
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
+                                  height10,
                                   Text(
                                     snapshot.data!.context,
                                     style: TextStyle(
@@ -161,31 +150,39 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       BoardStatWidget(
-                                        boardModel: snapshot.data!,
-                                        text: snapshot.data!.commentCount
-                                            .toString(),
-                                        //timeago
-                                        //  .format(DateTime.parse(snapshot.data!.createdAt), locale: context.locale.languageCode),
+                                        board: snapshot.data!,
+                                        text: "${snapshot.data!.viewCount}"
+                                            .text
+                                            .size(15)
+                                            .color(Colors.white)
+                                            .make(),
                                         height: 30,
                                         width: 80,
-                                        iconData: FontAwesomeIcons.solidComment,
+                                        icon: const Icon(
+                                          FontAwesomeIcons.bookOpenReader,
+                                          size: 15,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                      //category: "detailCommentCount"
                                       width15,
                                       BoardStatWidget(
-                                        boardModel: snapshot.data!,
-                                        text:
-                                            snapshot.data!.viewCount.toString(),
+                                        board: snapshot.data!,
+                                        text: "${snapshot.data!.commentCount}"
+                                            .text
+                                            .size(14)
+                                            .color(Colors.white)
+                                            .make(),
                                         height: 30,
-                                        width: 95,
-                                        iconData:
-                                            FontAwesomeIcons.bookOpenReader,
+                                        width: 80,
+                                        icon: const Icon(
+                                          FontAwesomeIcons.solidComment,
+                                          size: 15,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
+                                  height20,
                                 ],
                               ),
                             ),
@@ -194,9 +191,7 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                               height: 12,
                               color: Colors.grey.shade300,
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
+                            height15,
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 23, top: 20.0, right: 24, bottom: 30),
@@ -236,15 +231,20 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                                                           color: Colors.black),
                                                     ),
                                                   ),
-                                                  Text(
-                                                    timeFormatter(
-                                                        snapshot.data![index]
-                                                            .createdAt,
-                                                        "comment"),
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .grey.shade600),
-                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      TimeUtils.timeFormatterForComment(
+                                                              context,
+                                                              snapshot
+                                                                  .data![index]
+                                                                  .createdAt)
+                                                          .text
+                                                          .color(Colors
+                                                              .grey.shade600)
+                                                          .make(),
+                                                      width5,
+                                                    ],
+                                                  )
                                                 ],
                                               ),
                                             ),
@@ -252,9 +252,7 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
                                         },
                                         separatorBuilder:
                                             (BuildContext context, int index) {
-                                          return const SizedBox(
-                                            height: 20,
-                                          );
+                                          return height20;
                                         },
                                         itemCount: snapshot.data!.length,
                                       );
@@ -343,54 +341,6 @@ class _NoticeBoardDetailPageState extends State<NoticeBoardDetail> {
         ),
       ),
     );
-  }
-
-  String timeFormatter(String dateTime, String type) {
-    DateTime parsedCreatedTime = DateTime.parse(dateTime);
-
-    if (type == "board") {
-      if (DateTime.now().day == parsedCreatedTime.day) {
-        return "${DateTime.now().hour - parsedCreatedTime.hour}시간 전";
-      }
-
-      if (DateTime.now().day - parsedCreatedTime.day == 1) {
-        if (DateTime.now()
-                .subtract(Duration(hours: parsedCreatedTime.hour))
-                .hour ==
-            0) {
-          return "${parsedCreatedTime.month} / ${parsedCreatedTime.day}";
-        }
-        return "${DateTime.now().subtract(Duration(hours: parsedCreatedTime.hour)).hour} 시간 전";
-      }
-
-      return "${parsedCreatedTime.month} / ${parsedCreatedTime.day}";
-    }
-
-    if (DateTime.now().hour == parsedCreatedTime.hour) {
-      return "${DateTime.now().minute - parsedCreatedTime.minute}분 전";
-    }
-
-    if (DateTime.now().day == parsedCreatedTime.day) {
-      return "${DateTime.now().hour - parsedCreatedTime.hour}시간 전";
-    }
-
-    return "${parsedCreatedTime.month}/${parsedCreatedTime.day} ${zeroFormatter(parsedCreatedTime.hour)}:${zeroFormatter(parsedCreatedTime.minute)}";
-  }
-
-  String zeroFormatter(int time) {
-    if (time < 10) {
-      return "0$time";
-    }
-
-    return time.toString();
-  }
-
-  widthForViewCount(double height, double width) {
-    if (height > 1000) {
-      return width * 0.07;
-    }
-
-    return width * 0.17;
   }
 
   bool checkHeight(double height) {

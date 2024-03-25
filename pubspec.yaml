@@ -37,6 +37,7 @@ dependencies:
   velocity_x: ^4.1.2
   timeago: ^3.6.1
   easy_localization: ^3.0.5
+  intl: ^0.18.1
 
   font_awesome_flutter: ^10.7.0
   # The following adds the Cupertino Icons font to your application.

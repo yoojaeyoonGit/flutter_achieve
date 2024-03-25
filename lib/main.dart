@@ -8,6 +8,7 @@ import 'package:m2/screen/main/screen/home/f_home_page.dart';
 import 'package:m2/secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:intl/date_symbol_data_local.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -25,6 +26,7 @@ enum Status {
 }
 
 void main() async {
+  initializeDateFormatting();
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   timeago.setLocaleMessages('ko', timeago.KoMessages());
